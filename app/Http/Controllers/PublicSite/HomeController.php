@@ -36,6 +36,15 @@ final class HomeController extends Controller
             ? $categoriesSection->content
             : [];
 
+        $aboutSection = HomepageSection::query()
+            ->visible()
+            ->where('key', HomepageSectionKey::About->value)
+            ->first();
+
+        $aboutContent = is_array($aboutSection?->content)
+            ? $aboutSection->content
+            : [];
+
         return view('pages.home', [
             'heroSection' => $heroSection,
 
@@ -49,6 +58,16 @@ final class HomeController extends Controller
 
             'categoryItems' => $this->categoryItems(
                 $categoriesContent['items'] ?? [],
+            ),
+
+            'aboutSection' => $aboutSection,
+
+            'aboutImageUrl' => $this->publicStorageUrl(
+                $aboutContent['image_path'] ?? null,
+            ),
+
+            'aboutParagraphs' => $this->aboutParagraphs(
+                $aboutContent['paragraphs'] ?? [],
             ),
 
             'metaTitle' => $this->settingOrFallback(
@@ -136,6 +155,33 @@ final class HomeController extends Controller
         );
 
         return $categories;
+    }
+
+    /**
+     * Normalize About section paragraphs for predictable public rendering.
+     *
+     * Empty and malformed values are removed so they do not create blank
+     * paragraph spacing on the public homepage.
+     *
+     * @return list<string>
+     */
+    private function aboutParagraphs(mixed $paragraphs): array
+    {
+        if (! is_array($paragraphs)) {
+            return [];
+        }
+
+        $normalizedParagraphs = array_map(
+            static fn (mixed $paragraph): string => trim((string) $paragraph),
+            $paragraphs,
+        );
+
+        return array_values(
+            array_filter(
+                $normalizedParagraphs,
+                static fn (string $paragraph): bool => $paragraph !== '',
+            ),
+        );
     }
 
     /**

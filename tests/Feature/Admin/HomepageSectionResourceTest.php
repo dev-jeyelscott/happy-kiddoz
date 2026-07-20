@@ -136,3 +136,39 @@ it('updates categories using the canonical content field names', function (): vo
         ->and($categories->content['items'][0]['external_url'])
         ->toBe('https://shopee.ph/happy-kiddoz-tables');
 });
+
+it('updates about content using the canonical image path field', function (): void {
+    $about = HomepageSection::query()
+        ->where('key', 'about')
+        ->firstOrFail();
+
+    $content = $about->content;
+    $content['paragraphs'][0] = 'Updated About story paragraph.';
+
+    Livewire::test(EditHomepageSection::class, [
+        'record' => $about->getRouteKey(),
+    ])
+        ->fillForm([
+            'is_visible' => true,
+            'content' => $content,
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors()
+        ->assertNotified();
+
+    $about->refresh();
+
+    expect($about->content)
+        ->toHaveKeys([
+            'eyebrow',
+            'heading',
+            'paragraphs',
+            'image_path',
+            'image_alt',
+        ])
+        ->not->toHaveKey('image')
+        ->and($about->content['paragraphs'][0])
+        ->toBe('Updated About story paragraph.')
+        ->and($about->content['image_path'])
+        ->not->toBeNull();
+});

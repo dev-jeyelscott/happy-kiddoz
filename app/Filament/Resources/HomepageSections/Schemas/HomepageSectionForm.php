@@ -247,7 +247,7 @@ class HomepageSectionForm
                     ->columnSpanFull(),
 
                 self::imageUpload(
-                    name: 'content.image',
+                    name: 'content.image_path',
                     label: 'About Image',
                     directory: 'homepage/about',
                     minWidth: 900,
