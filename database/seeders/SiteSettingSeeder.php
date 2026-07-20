@@ -49,7 +49,6 @@ class SiteSettingSeeder extends Seeder
                 ),
                 'group' => 'brand',
             ],
-
             'favicon_path' => [
                 'value' => $this->seedBrandAsset(
                     sourceRelativePath: 'images/brand/favicon.webp',
@@ -58,31 +57,33 @@ class SiteSettingSeeder extends Seeder
                 'group' => 'brand',
             ],
 
-            // Marketplace and social links
+            // Marketplace links
             'primary_shop_url' => [
-                'value' => null,
+                'value' => '',
                 'group' => 'marketplace',
             ],
             'shopee_url' => [
-                'value' => null,
+                'value' => 'https://shopee.ph/bugs_2wan',
                 'group' => 'marketplace',
             ],
             'lazada_url' => [
-                'value' => null,
+                'value' => 'https://www.lazada.com.ph/tag/happy-kiddo/',
                 'group' => 'marketplace',
             ],
+
+            // Social links
             'facebook_url' => [
-                'value' => null,
+                'value' => 'https://www.facebook.com/happykiddosph/',
                 'group' => 'social',
             ],
             'instagram_url' => [
-                'value' => null,
+                'value' => 'https://www.instagram.com/happykiddosph/?hl=en',
                 'group' => 'social',
             ],
 
             // Contact information
             'contact_email' => [
-                'value' => null,
+                'value' => 'happykiddosph@gmail.com',
                 'group' => 'contact',
             ],
             'contact_phone' => [
@@ -94,7 +95,7 @@ class SiteSettingSeeder extends Seeder
                 'group' => 'contact',
             ],
             'contact_address' => [
-                'value' => null,
+                'value' => 'Valenzuela City, Metro Manila, Philippines',
                 'group' => 'contact',
             ],
             'contact_map_url' => [

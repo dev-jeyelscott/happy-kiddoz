@@ -61,7 +61,7 @@ it('seeds all eight approved product categories in their required order', functi
         ]);
 });
 
-it('keeps reviews and faq hidden until approved content exists', function () {
+it('keeps approved reviews visible and faq hidden until faq content exists', function () {
     $this->seed(HomepageSectionSeeder::class);
 
     $reviews = HomepageSection::query()
@@ -73,30 +73,34 @@ it('keeps reviews and faq hidden until approved content exists', function () {
         ->firstOrFail();
 
     expect($reviews->is_visible)
-        ->toBeFalse()
+        ->toBeTrue()
         ->and($reviews->content['items'])
-        ->toBe([])
+        ->toHaveCount(4)
         ->and($faq->is_visible)
         ->toBeFalse()
         ->and($faq->content['items'])
         ->toBe([]);
 });
 
-it('seeds Happy Kiddos global settings without placeholder links', function () {
+it('seeds the approved marketplace social and contact settings', function () {
     $this->seed(SiteSettingSeeder::class);
 
     expect(SiteSetting::value('brand_name'))
         ->toBe('Happy Kiddos')
         ->and(SiteSetting::value('primary_shop_url'))
-        ->toBeNull()
+        ->toBe('https://shopee.ph/bugs_2wan')
         ->and(SiteSetting::value('shopee_url'))
-        ->toBeNull()
+        ->toBe('https://shopee.ph/bugs_2wan')
         ->and(SiteSetting::value('lazada_url'))
-        ->toBeNull()
+        ->toBe('https://www.lazada.com.ph/tag/happy-kiddo/')
         ->and(SiteSetting::value('facebook_url'))
-        ->toBeNull()
+        ->toBe('https://www.facebook.com/happykiddosph/')
         ->and(SiteSetting::value('instagram_url'))
-        ->toBeNull();
+        ->toBe('https://www.instagram.com/happykiddosph/?hl=en')
+        ->and(SiteSetting::value('contact_email'))
+        ->toBe('happykiddosph@gmail.com')
+        ->and(SiteSetting::value('contact_address'))
+        ->toBe('Valenzuela City, Metro Manila, Philippines');
 });
 
 it('can run the site setting seeder repeatedly without duplicate keys', function () {
