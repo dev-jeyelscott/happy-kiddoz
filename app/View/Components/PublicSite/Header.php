@@ -83,6 +83,10 @@ final class Header extends Component
             return false;
         }
 
+        if ($section->key === HomepageSectionKey::Reviews) {
+            return $this->reviewsHaveVisibleContent($section);
+        }
+
         if ($section->key === HomepageSectionKey::Faq) {
             return $this->faqHasVisibleContent($section);
         }
@@ -103,6 +107,52 @@ final class Header extends Component
         return ViewFacade::exists(
             'components.home.'.$key->value,
         );
+    }
+
+    /**
+     * Determine whether the Reviews section contains a complete public card.
+     */
+    private function reviewsHaveVisibleContent(
+        HomepageSection $section,
+    ): bool {
+        $items = $section->content['items'] ?? [];
+
+        if (! is_array($items)) {
+            return false;
+        }
+
+        foreach ($items as $item) {
+            if (! is_array($item)) {
+                continue;
+            }
+
+            $rating = filter_var(
+                $item['rating'] ?? null,
+                FILTER_VALIDATE_INT,
+                [
+                    'options' => [
+                        'min_range' => 1,
+                        'max_range' => 5,
+                    ],
+                ],
+            );
+
+            $hasCustomerIdentifier = filled(
+                $item['customer_handle'] ?? null,
+            ) || filled(
+                $item['customer_name'] ?? null,
+            );
+
+            if (
+                $hasCustomerIdentifier
+                && filled($item['quote'] ?? null)
+                && $rating !== false
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

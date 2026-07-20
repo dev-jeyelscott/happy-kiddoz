@@ -9,6 +9,7 @@ use App\Models\HomepageSection;
 use App\Models\SiteSetting;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 final class HomeController extends Controller
 {
@@ -55,6 +56,15 @@ final class HomeController extends Controller
             ? $advantagesSection->content
             : [];
 
+        $reviewsSection = HomepageSection::query()
+            ->visible()
+            ->where('key', HomepageSectionKey::Reviews->value)
+            ->first();
+
+        $reviewsContent = is_array($reviewsSection?->content)
+            ? $reviewsSection->content
+            : [];
+
         return view('pages.home', [
             'heroSection' => $heroSection,
 
@@ -84,6 +94,12 @@ final class HomeController extends Controller
 
             'advantageItems' => $this->advantageItems(
                 $advantagesContent['items'] ?? [],
+            ),
+
+            'reviewsSection' => $reviewsSection,
+
+            'reviewItems' => $this->reviewItems(
+                $reviewsContent['items'] ?? [],
             ),
 
             'metaTitle' => $this->settingOrFallback(
@@ -271,6 +287,94 @@ final class HomeController extends Controller
         );
 
         return $advantages;
+    }
+
+    /**
+     * Normalize customer reviews for safe and predictable public rendering.
+     *
+     * Incomplete reviews and invalid ratings are excluded. The customer handle
+     * takes precedence over the customer name when both values are available.
+     *
+     * @return list<array{
+     *     customer_identifier: string,
+     *     avatar_initial: string,
+     *     rating: int,
+     *     quote: string
+     * }>
+     */
+    private function reviewItems(mixed $items): array
+    {
+        if (! is_array($items)) {
+            return [];
+        }
+
+        $reviews = [];
+
+        /*
+         * Enforce the same upper limit as the Filament form even when data is
+         * written outside the administration panel.
+         */
+        foreach (array_slice($items, 0, 6) as $item) {
+            if (! is_array($item)) {
+                continue;
+            }
+
+            $customerName = trim(
+                (string) ($item['customer_name'] ?? ''),
+            );
+
+            $customerHandle = trim(
+                (string) ($item['customer_handle'] ?? ''),
+            );
+
+            $customerIdentifier = $customerHandle !== ''
+                ? $customerHandle
+                : $customerName;
+
+            $quote = trim((string) ($item['quote'] ?? ''));
+
+            $rating = filter_var(
+                $item['rating'] ?? null,
+                FILTER_VALIDATE_INT,
+                [
+                    'options' => [
+                        'min_range' => 1,
+                        'max_range' => 5,
+                    ],
+                ],
+            );
+
+            /*
+             * A public review must have an identifier, quotation, and valid
+             * one-to-five-star rating.
+             */
+            if (
+                $customerIdentifier === ''
+                || $quote === ''
+                || $rating === false
+            ) {
+                continue;
+            }
+
+            $avatarSource = trim(
+                (string) ($item['avatar_initial'] ?? ''),
+            );
+
+            if ($avatarSource === '') {
+                $avatarSource = $customerIdentifier;
+            }
+
+            $reviews[] = [
+                'customer_identifier' => $customerIdentifier,
+                'avatar_initial' => Str::lower(
+                    Str::substr($avatarSource, 0, 1),
+                ),
+                'rating' => $rating,
+                'quote' => $quote,
+            ];
+        }
+
+        return $reviews;
     }
 
     /**

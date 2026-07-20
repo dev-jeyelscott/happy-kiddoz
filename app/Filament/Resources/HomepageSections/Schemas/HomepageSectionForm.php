@@ -329,15 +329,26 @@ class HomepageSectionForm
     }
 
     /**
-     * Build the customer-review fields.
+     * Build the customer-review editing fields.
+     *
+     * The approved baseline contains four cards. Administrators may publish up
+     * to six reviews while preserving the responsive two-column composition.
      */
     private static function reviewsSection(): Section
     {
         return Section::make('Customer Reviews')
+            ->description(
+                'Use quotations and customer identifiers that are approved for public display.'
+            )
             ->visible(
                 fn (?HomepageSection $record): bool => self::sectionKey($record) === 'reviews'
             )
             ->schema([
+                TextInput::make('content.eyebrow')
+                    ->label('Eyebrow')
+                    ->required()
+                    ->maxLength(120),
+
                 TextInput::make('content.heading')
                     ->label('Section Heading')
                     ->required()
@@ -345,24 +356,37 @@ class HomepageSectionForm
 
                 Repeater::make('content.items')
                     ->label('Reviews')
-                    ->minItems(2)
+                    ->minItems(4)
                     ->maxItems(6)
+                    ->addActionLabel('Add review')
+                    ->reorderableWithButtons()
                     ->collapsible()
+                    ->itemNumbers()
                     ->itemLabel(
-                        fn (array $state): ?string => $state['customer_name'] ?? null
+                        fn (array $state): ?string => filled(
+                            $state['customer_handle'] ?? null
+                        )
+                            ? (string) $state['customer_handle']
+                            : ($state['customer_name'] ?? null)
                     )
                     ->columns(2)
                     ->schema([
                         TextInput::make('customer_name')
-                            ->label('Customer Name')
+                            ->label('Customer Name or Identifier')
                             ->required()
-                            ->maxLength(120),
+                            ->maxLength(120)
+                            ->live(onBlur: true),
 
                         TextInput::make('customer_handle')
                             ->label('Customer Username or Handle')
-                            ->maxLength(120),
+                            ->maxLength(120)
+                            ->live(onBlur: true)
+                            ->helperText(
+                                'When provided, this value is displayed instead of the customer name.'
+                            ),
 
                         TextInput::make('rating')
+                            ->label('Rating')
                             ->numeric()
                             ->integer()
                             ->minValue(1)
@@ -371,7 +395,10 @@ class HomepageSectionForm
 
                         TextInput::make('avatar_initial')
                             ->label('Avatar Initial')
-                            ->maxLength(2),
+                            ->maxLength(1)
+                            ->helperText(
+                                'Leave empty to derive the first character from the customer identifier.'
+                            ),
 
                         Textarea::make('quote')
                             ->label('Review')

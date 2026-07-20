@@ -14,4 +14,8 @@
 		@if ($advantagesSection)
 				<x-home.advantages :section="$advantagesSection" :items="$advantageItems" />
 		@endif
+
+		@if ($reviewsSection && $reviewItems !== [])
+				<x-home.reviews :section="$reviewsSection" :items="$reviewItems" />
+		@endif
 </x-layouts.public>

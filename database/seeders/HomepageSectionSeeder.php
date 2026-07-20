@@ -224,10 +224,10 @@ class HomepageSectionSeeder extends Seeder
     }
 
     /**
-     * Return the review-section structure.
+     * Return the approved review-section content.
      *
-     * Reviews remain empty and hidden until their wording, source,
-     * customer identity, and display permission are approved.
+     * Review wording and customer identifiers are preserved from the approved
+     * homepage design. Do not silently correct or rewrite customer quotations.
      *
      * @return array<string, mixed>
      */
@@ -236,7 +236,36 @@ class HomepageSectionSeeder extends Seeder
         return [
             'eyebrow' => 'Real Reviews From Real People',
             'heading' => 'Over 20,000 positive reviews!',
-            'items' => [],
+            'items' => [
+                [
+                    'customer_name' => 'dz1eb598zm',
+                    'customer_handle' => null,
+                    'rating' => 5,
+                    'avatar_initial' => 'd',
+                    'quote' => 'I recommend this store. Sobrang Ganda nang item. Worth the price. God bless and continue doing good.',
+                ],
+                [
+                    'customer_name' => 'nehjtolenttinodelatorre',
+                    'customer_handle' => null,
+                    'rating' => 5,
+                    'avatar_initial' => 'n',
+                    'quote' => 'Ang ganda ng table and chair pang mall quality. Tsaka kahit sulatan ng mga babies ko nahubura sya. Hindi gaya ng ibang mesa na pag sinulatan ng sstay na. Makinis at glossy kasi kaya madali mabura yung sulat. Super happy to this item.',
+                ],
+                [
+                    'customer_name' => 'gaul822',
+                    'customer_handle' => null,
+                    'rating' => 5,
+                    'avatar_initial' => 'g',
+                    'quote' => 'Variation: White Grey Trays. Quality: The overall structure feels sturdy even when the book shelves are full. Suitability: easy to assemble and makes organizing toys easier. Appearance: 💯 💯 💯',
+                ],
+                [
+                    'customer_name' => 'joyestrellado',
+                    'customer_handle' => null,
+                    'rating' => 5,
+                    'avatar_initial' => 'j',
+                    'quote' => 'Variation: WHITE. Durability: ganda ng quality! Fast delivery and secure ang packaka packaging thank you!',
+                ],
+            ],
         ];
     }
 
@@ -273,13 +302,12 @@ class HomepageSectionSeeder extends Seeder
     /**
      * Resolve initial visibility using content-approval requirements.
      *
-     * FAQ and reviews remain hidden because their approved repeated content
-     * is not yet available. All other launch sections use the enum default.
+     * Reviews are visible because approved review content is available.
+     * FAQ remains hidden until approved FAQ content is supplied.
      */
     private function visibilityFor(HomepageSectionKey $key): bool
     {
         return match ($key) {
-            HomepageSectionKey::Reviews,
             HomepageSectionKey::Faq => false,
             default => $key->defaultVisibility(),
         };
