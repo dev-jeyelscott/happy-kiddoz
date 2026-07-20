@@ -10,17 +10,14 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
+     * Seed the canonical Happy Kiddoz development baseline.
      */
     public function run(): void
     {
         $this->call([
             AdminUserSeeder::class,
             SiteSettingSeeder::class,
-            PageSeeder::class,
-            MenuSeeder::class,
-            GalleryImageSeeder::class,
-            InquirySeeder::class,
+            HomepageSectionSeeder::class,
         ]);
     }
 }

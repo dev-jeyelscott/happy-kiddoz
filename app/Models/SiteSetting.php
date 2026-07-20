@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property string $key
- * @property string $value
+ * @property string|null $value
  * @property string $group
  */
 #[Fillable(['key', 'value', 'group'])]
