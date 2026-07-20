@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\SiteSetting;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class SiteSettingSeeder extends Seeder
 {
@@ -42,14 +43,17 @@ class SiteSettingSeeder extends Seeder
                 'group' => 'brand',
             ],
             'logo_path' => [
-                'value' => $this->publicAssetPath(
-                    'images/brand/happy-kiddoz-logo.webp',
+                'value' => $this->seedBrandAsset(
+                    sourceRelativePath: 'images/brand/happy-kiddoz-logo.webp',
+                    targetPath: 'site/brand/happy-kiddoz-logo.webp',
                 ),
                 'group' => 'brand',
             ],
+
             'favicon_path' => [
-                'value' => $this->publicAssetPath(
-                    'images/brand/favicon.webp',
+                'value' => $this->seedBrandAsset(
+                    sourceRelativePath: 'images/brand/favicon.webp',
+                    targetPath: 'site/brand/favicon.webp',
                 ),
                 'group' => 'brand',
             ],
@@ -125,12 +129,26 @@ class SiteSettingSeeder extends Seeder
     }
 
     /**
-     * Return a public asset path only when the approved file exists.
+     * Copy a tracked default brand asset to Laravel's public storage disk.
+     *
+     * The stored setting remains a disk-relative path so Filament uploads
+     * and future public rendering use the same path format.
      */
-    private function publicAssetPath(string $relativePath): ?string
-    {
-        return File::exists(public_path($relativePath))
-            ? $relativePath
-            : null;
+    private function seedBrandAsset(
+        string $sourceRelativePath,
+        string $targetPath,
+    ): ?string {
+        $sourcePath = public_path($sourceRelativePath);
+
+        if (! File::exists($sourcePath)) {
+            return null;
+        }
+
+        Storage::disk('public')->put(
+            $targetPath,
+            File::get($sourcePath),
+        );
+
+        return $targetPath;
     }
 }
