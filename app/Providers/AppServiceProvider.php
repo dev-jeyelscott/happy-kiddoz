@@ -3,18 +3,15 @@
 namespace App\Providers;
 
 use Carbon\CarbonImmutable;
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Register application services in the service container.
      */
     public function register(): void
     {
@@ -22,28 +19,32 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any application services.
+     * Bootstrap application-wide defaults.
      */
     public function boot(): void
     {
         $this->configureDefaults();
-        RateLimiter::for('public-forms', function (Request $request) {
-            return Limit::perMinute(5)->by($request->ip());
-        });
-
     }
 
     /**
-     * Configure default behaviors for production-ready applications.
+     * Configure secure and predictable application defaults.
      */
     protected function configureDefaults(): void
     {
         Date::use(CarbonImmutable::class);
 
+        /*
+         * Prevent destructive database console commands from running in the
+         * production environment.
+         */
         DB::prohibitDestructiveCommands(
             app()->isProduction(),
         );
 
+        /*
+         * Apply stronger password requirements in production while allowing
+         * Laravel's normal defaults during local development and testing.
+         */
         Password::defaults(fn (): ?Password => app()->isProduction()
             ? Password::min(12)
                 ->mixedCase()

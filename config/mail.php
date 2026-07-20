@@ -115,6 +115,4 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
-    'inquiries_to' => env('MAIL_INQUIRIES_TO', env('MAIL_FROM_ADDRESS')),
-
 ];
