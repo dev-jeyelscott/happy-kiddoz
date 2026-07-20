@@ -54,6 +54,12 @@
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
     }
+    /*
+     * Prevent sticky navigation from covering anchored homepage headings.
+     */
+    section[id] {
+        scroll-margin-top: 6rem;
+    }
 }
 
 [data-flux-field]:not(ui-radio, ui-checkbox) {
