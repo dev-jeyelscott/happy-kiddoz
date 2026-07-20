@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\HomepageAdvantageIcon;
 use App\Enums\HomepageSectionKey;
 use App\Models\HomepageSection;
 use Illuminate\Database\Seeder;
@@ -189,31 +190,31 @@ class HomepageSectionSeeder extends Seeder
             'heading' => 'The Happy Kiddoz Advantage',
             'items' => [
                 [
-                    'icon' => 'sparkles',
+                    'icon' => HomepageAdvantageIcon::Sparkles->value,
                     'title' => 'Pioneer in Montessori Furniture',
                     'description' => 'The first to offer Montessori-inspired furniture in the Philippine market.',
                     'sort_order' => 10,
                 ],
                 [
-                    'icon' => 'leaf',
+                    'icon' => HomepageAdvantageIcon::Leaf->value,
                     'title' => 'Natural & non-toxic',
                     'description' => 'Solid, sustainably sourced wood with child-safe, non-toxic finishes and smooth, rounded edges.',
                     'sort_order' => 20,
                 ],
                 [
-                    'icon' => 'blocks',
+                    'icon' => HomepageAdvantageIcon::Blocks->value,
                     'title' => 'Montessori-aligned',
                     'description' => 'Designed to be child-sized and accessible, encouraging independence and focused play.',
                     'sort_order' => 30,
                 ],
                 [
-                    'icon' => 'shield',
+                    'icon' => HomepageAdvantageIcon::Shield->value,
                     'title' => 'Built to last',
                     'description' => 'Sturdy construction tested for busy homes and classrooms, made to grow with your child.',
                     'sort_order' => 40,
                 ],
                 [
-                    'icon' => 'truck',
+                    'icon' => HomepageAdvantageIcon::Truck->value,
                     'title' => 'Nationwide delivery',
                     'description' => 'Fast, careful shipping across the Philippines via Shopee, Lazada, and approved couriers.',
                     'sort_order' => 50,

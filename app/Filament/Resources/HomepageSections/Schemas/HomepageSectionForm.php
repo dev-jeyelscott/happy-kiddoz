@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\HomepageSections\Schemas;
 
+use App\Enums\HomepageAdvantageIcon;
 use App\Models\HomepageSection;
 use BackedEnum;
 use Filament\Forms\Components\FileUpload;
@@ -262,15 +263,23 @@ class HomepageSectionForm
     }
 
     /**
-     * Build the fixed five-advantage fields.
+     * Build the fixed five-advantage editing fields.
      */
     private static function advantagesSection(): Section
     {
         return Section::make('Happy Kiddoz Advantages')
+            ->description(
+                'The approved homepage design contains exactly five advantage cards.'
+            )
             ->visible(
                 fn (?HomepageSection $record): bool => self::sectionKey($record) === 'advantages'
             )
             ->schema([
+                TextInput::make('content.eyebrow')
+                    ->label('Eyebrow')
+                    ->required()
+                    ->maxLength(120),
+
                 TextInput::make('content.heading')
                     ->label('Section Heading')
                     ->required()
@@ -289,22 +298,28 @@ class HomepageSectionForm
                     )
                     ->columns(2)
                     ->schema([
+                        /*
+                        * Preserve the fixed design order without exposing the
+                        * ordering value to the administrator.
+                        */
+                        Hidden::make('sort_order')
+                            ->required(),
+
                         Select::make('icon')
+                            ->label('Icon')
                             ->required()
                             ->native(false)
-                            ->options([
-                                'pioneer' => 'Pioneer / Sparkles',
-                                'natural' => 'Natural / Leaf',
-                                'montessori' => 'Montessori / Academic Cap',
-                                'durable' => 'Built to Last / Shield',
-                                'delivery' => 'Nationwide Delivery / Truck',
-                            ]),
+                            ->selectablePlaceholder(false)
+                            ->options(HomepageAdvantageIcon::options())
+                            ->disableOptionsWhenSelectedInSiblingRepeaterItems(),
 
                         TextInput::make('title')
+                            ->label('Title')
                             ->required()
                             ->maxLength(120),
 
                         Textarea::make('description')
+                            ->label('Description')
                             ->required()
                             ->rows(3)
                             ->maxLength(400)

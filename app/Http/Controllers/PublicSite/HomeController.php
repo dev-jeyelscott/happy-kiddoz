@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\PublicSite;
 
+use App\Enums\HomepageAdvantageIcon;
 use App\Enums\HomepageSectionKey;
 use App\Http\Controllers\Controller;
 use App\Models\HomepageSection;
@@ -45,6 +46,15 @@ final class HomeController extends Controller
             ? $aboutSection->content
             : [];
 
+        $advantagesSection = HomepageSection::query()
+            ->visible()
+            ->where('key', HomepageSectionKey::Advantages->value)
+            ->first();
+
+        $advantagesContent = is_array($advantagesSection?->content)
+            ? $advantagesSection->content
+            : [];
+
         return view('pages.home', [
             'heroSection' => $heroSection,
 
@@ -68,6 +78,12 @@ final class HomeController extends Controller
 
             'aboutParagraphs' => $this->aboutParagraphs(
                 $aboutContent['paragraphs'] ?? [],
+            ),
+
+            'advantagesSection' => $advantagesSection,
+
+            'advantageItems' => $this->advantageItems(
+                $advantagesContent['items'] ?? [],
             ),
 
             'metaTitle' => $this->settingOrFallback(
@@ -182,6 +198,79 @@ final class HomeController extends Controller
                 static fn (string $paragraph): bool => $paragraph !== '',
             ),
         );
+    }
+
+    /**
+     * Normalize advantage cards for safe and predictable public rendering.
+     *
+     * Unknown icon identifiers and incomplete cards are excluded. This
+     * prevents arbitrary CMS-controlled HTML or SVG from reaching the view.
+     *
+     * @return list<array{
+     *     icon: HomepageAdvantageIcon,
+     *     title: string,
+     *     description: string,
+     *     sort_order: int
+     * }>
+     */
+    private function advantageItems(mixed $items): array
+    {
+        if (! is_array($items)) {
+            return [];
+        }
+
+        $advantages = [];
+
+        foreach ($items as $item) {
+            if (! is_array($item)) {
+                continue;
+            }
+
+            $icon = HomepageAdvantageIcon::tryFrom(
+                trim((string) ($item['icon'] ?? '')),
+            );
+
+            $title = trim((string) ($item['title'] ?? ''));
+            $description = trim((string) ($item['description'] ?? ''));
+
+            /*
+             * A card must have an approved icon, title, and description.
+             * Invalid CMS values should not generate incomplete UI elements.
+             */
+            if (
+                $icon === null
+                || $title === ''
+                || $description === ''
+            ) {
+                continue;
+            }
+
+            $sortOrder = filter_var(
+                $item['sort_order'] ?? null,
+                FILTER_VALIDATE_INT,
+            );
+
+            $advantages[] = [
+                'icon' => $icon,
+                'title' => $title,
+                'description' => $description,
+                'sort_order' => $sortOrder !== false
+                    ? $sortOrder
+                    : (count($advantages) + 1) * 10,
+            ];
+        }
+
+        /*
+         * Preserve the approved card sequence independently of the JSON
+         * array's current physical ordering.
+         */
+        usort(
+            $advantages,
+            static fn (array $left, array $right): int => $left['sort_order']
+                <=> $right['sort_order'],
+        );
+
+        return $advantages;
     }
 
     /**
@@ -302,7 +391,6 @@ final class HomeController extends Controller
      * @param  array<string, string|null>  $settings
      */
     private function settingOrFallback(
-
         array $settings,
         string $key,
         string $fallback,

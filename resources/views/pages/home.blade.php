@@ -10,4 +10,8 @@
 		@if ($aboutSection)
 				<x-home.about :section="$aboutSection" :image-url="$aboutImageUrl" :paragraphs="$aboutParagraphs" />
 		@endif
+
+		@if ($advantagesSection)
+				<x-home.advantages :section="$advantagesSection" :items="$advantageItems" />
+		@endif
 </x-layouts.public>
