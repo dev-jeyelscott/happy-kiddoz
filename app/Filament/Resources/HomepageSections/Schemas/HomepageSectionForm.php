@@ -5,6 +5,7 @@ namespace App\Filament\Resources\HomepageSections\Schemas;
 use App\Models\HomepageSection;
 use BackedEnum;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -141,6 +142,11 @@ class HomepageSectionForm
                 fn (?HomepageSection $record): bool => self::sectionKey($record) === 'categories'
             )
             ->schema([
+                TextInput::make('content.eyebrow')
+                    ->label('Eyebrow')
+                    ->required()
+                    ->maxLength(80),
+
                 TextInput::make('content.heading')
                     ->label('Section Heading')
                     ->required()
@@ -159,29 +165,49 @@ class HomepageSectionForm
                     )
                     ->columns(2)
                     ->schema([
+                        /*
+                        * Preserve the canonical fixed ordering without exposing
+                        * it as an editable administrator field.
+                        */
+                        Hidden::make('sort_order')
+                            ->required(),
+
                         TextInput::make('title')
+                            ->label('Category Title')
                             ->required()
                             ->maxLength(100),
 
+                        Textarea::make('description')
+                            ->label('Description')
+                            ->required()
+                            ->rows(3)
+                            ->maxLength(240)
+                            ->columnSpanFull(),
+
                         self::imageUpload(
-                            name: 'image',
+                            name: 'image_path',
                             label: 'Category Image',
                             directory: 'homepage/categories',
-                            minWidth: 600,
+                            minWidth: 800,
                             minHeight: 600,
                         ),
 
                         TextInput::make('image_alt')
                             ->label('Image Alt Text')
                             ->required()
-                            ->maxLength(180),
+                            ->maxLength(180)
+                            ->helperText(
+                                'Describe the image itself instead of repeating the category title.'
+                            ),
 
-                        TextInput::make('url')
+                        TextInput::make('external_url')
                             ->label('External Category URL')
                             ->url()
+                            ->rule('url:https')
                             ->maxLength(2048)
+                            ->columnSpanFull()
                             ->helperText(
-                                'Leave empty until the client supplies the destination URL.'
+                                'Leave empty until the client supplies an approved HTTPS destination.'
                             ),
                     ]),
             ]);

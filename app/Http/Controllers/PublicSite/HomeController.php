@@ -27,23 +27,115 @@ final class HomeController extends Controller
             ? $heroSection->content
             : [];
 
+        $categoriesSection = HomepageSection::query()
+            ->visible()
+            ->where('key', HomepageSectionKey::Categories->value)
+            ->first();
+
+        $categoriesContent = is_array($categoriesSection?->content)
+            ? $categoriesSection->content
+            : [];
+
         return view('pages.home', [
             'heroSection' => $heroSection,
+
             'heroImageUrl' => $this->publicStorageUrl(
                 $heroContent['image_path'] ?? null,
             ),
+
             'heroLinks' => $this->heroLinks($settings),
+
+            'categoriesSection' => $categoriesSection,
+
+            'categoryItems' => $this->categoryItems(
+                $categoriesContent['items'] ?? [],
+            ),
+
             'metaTitle' => $this->settingOrFallback(
                 settings: $settings,
                 key: 'meta_title',
                 fallback: 'Happy Kiddoz | Montessori Furniture and Learning Materials',
             ),
+
             'metaDescription' => $this->settingOrFallback(
                 settings: $settings,
                 key: 'meta_description',
                 fallback: 'Thoughtfully designed Montessori furniture and learning materials for Filipino homes, schools, and learning centers.',
             ),
         ]);
+    }
+
+    /**
+     * Normalize category content for safe and predictable public rendering.
+     *
+     * @return list<array{
+     *     title: string,
+     *     description: string,
+     *     image_url: string|null,
+     *     image_alt: string,
+     *     external_url: string|null,
+     *     sort_order: int
+     * }>
+     */
+    private function categoryItems(mixed $items): array
+    {
+        if (! is_array($items)) {
+            return [];
+        }
+
+        $categories = [];
+
+        foreach ($items as $item) {
+            if (! is_array($item)) {
+                continue;
+            }
+
+            $title = trim((string) ($item['title'] ?? ''));
+
+            /*
+             * Invalid or incomplete category records should not create
+             * blank public cards.
+             */
+            if ($title === '') {
+                continue;
+            }
+
+            $sortOrder = filter_var(
+                $item['sort_order'] ?? null,
+                FILTER_VALIDATE_INT,
+            );
+
+            $categories[] = [
+                'title' => $title,
+                'description' => trim(
+                    (string) ($item['description'] ?? ''),
+                ),
+                'image_url' => $this->publicStorageUrl(
+                    $item['image_path'] ?? null,
+                ),
+                'image_alt' => trim(
+                    (string) ($item['image_alt'] ?? ''),
+                ),
+                'external_url' => $this->validatedHttpsUrl(
+                    $item['external_url'] ?? null,
+                ),
+                'sort_order' => $sortOrder !== false
+                    ? $sortOrder
+                    : (count($categories) + 1) * 10,
+            ];
+        }
+
+        /*
+         * The JSON array order must not be treated as the source of truth.
+         * Explicit sort_order values preserve the approved design order.
+         */
+        usort(
+            $categories,
+            static fn (array $left, array $right): int => $left['sort_order']
+                <=> $right['sort_order'],
+        );
+
+        return $categories;
     }
 
     /**
@@ -164,6 +256,7 @@ final class HomeController extends Controller
      * @param  array<string, string|null>  $settings
      */
     private function settingOrFallback(
+
         array $settings,
         string $key,
         string $fallback,

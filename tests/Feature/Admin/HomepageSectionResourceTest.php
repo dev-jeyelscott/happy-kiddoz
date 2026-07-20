@@ -97,3 +97,42 @@ it('forbids creating and deleting fixed sections', function (): void {
         ->and($user->can('delete', $hero))
         ->toBeFalse();
 });
+
+it('updates categories using the canonical content field names', function (): void {
+    $categories = HomepageSection::query()
+        ->where('key', 'categories')
+        ->firstOrFail();
+
+    $content = $categories->content;
+    $content['items'][0]['description'] =
+        'Updated category description.';
+    $content['items'][0]['external_url'] =
+        'https://shopee.ph/happy-kiddoz-tables';
+
+    Livewire::test(EditHomepageSection::class, [
+        'record' => $categories->getRouteKey(),
+    ])
+        ->fillForm([
+            'is_visible' => true,
+            'content' => $content,
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors()
+        ->assertNotified();
+
+    $categories->refresh();
+
+    expect($categories->content['items'][0])
+        ->toHaveKeys([
+            'title',
+            'description',
+            'image_path',
+            'image_alt',
+            'external_url',
+            'sort_order',
+        ])
+        ->and($categories->content['items'][0]['description'])
+        ->toBe('Updated category description.')
+        ->and($categories->content['items'][0]['external_url'])
+        ->toBe('https://shopee.ph/happy-kiddoz-tables');
+});
