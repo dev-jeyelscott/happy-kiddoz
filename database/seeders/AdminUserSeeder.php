@@ -16,11 +16,11 @@ class AdminUserSeeder extends Seeder
         $password = config('admin.seed_user.password');
 
         if (! is_string($name) || $name === '') {
-            $name = 'Restaurant Admin';
+            $name = 'HappyKiddos Admin';
         }
 
         if (! is_string($email) || $email === '') {
-            $email = 'admin@example.com';
+            $email = 'admin@happykiddos.ph';
         }
 
         if (! is_string($password) || $password === '') {
