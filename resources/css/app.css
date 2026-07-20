@@ -54,6 +54,7 @@
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
     }
+
     /*
      * Prevent sticky navigation from covering anchored homepage headings.
      */
@@ -78,4 +79,92 @@ select:focus[data-flux-control] {
 
 [x-cloak] {
     display: none !important;
+}
+
+/*
+ * Public homepage layout contract.
+ *
+ * The approved mockup uses a wide, centered canvas with approximately 32px
+ * gutters on tablet and desktop. These selectors intentionally override the
+ * older per-section width and padding utilities so every homepage section,
+ * the sticky header, the contact CTA, and the legal footer share one rhythm.
+ */
+:root {
+    --homepage-shell-max-width: 112rem;
+    --homepage-shell-gutter: 1.5rem;
+}
+
+header > div:first-of-type,
+section[aria-labelledby="homepage-hero-heading"] > div,
+#shop > div,
+#about > div,
+#why-us > div,
+#reviews > div,
+#faq > div,
+#contact > div {
+    width: 100%;
+    max-width: var(--homepage-shell-max-width);
+    padding-inline: var(--homepage-shell-gutter);
+}
+
+/*
+ * The hero already has its horizontal gutter on the shared outer shell.
+ * Remove the legacy nested padding to keep its copy aligned with the header
+ * logo and all section headings.
+ */
+section[aria-labelledby="homepage-hero-heading"] > div > div:first-child {
+    padding-inline: 0;
+}
+
+/*
+ * Keep the expanded mobile navigation aligned with the same page gutters.
+ */
+#mobile-navigation {
+    padding-inline: var(--homepage-shell-gutter);
+}
+
+#mobile-navigation > div {
+    max-width: var(--homepage-shell-max-width);
+}
+
+/*
+ * Scale the public brand mark without changing its intrinsic aspect ratio.
+ */
+header > div:first-of-type a[aria-label$=" home"] img {
+    width: auto;
+    height: 4rem;
+}
+
+#contact footer a[aria-label$=" home"] img {
+    width: auto;
+    height: 4rem;
+}
+
+@media (min-width: 40rem) {
+    :root {
+        --homepage-shell-gutter: 2rem;
+    }
+
+    header > div:first-of-type {
+        min-height: 7rem;
+    }
+
+    header > div:first-of-type a[aria-label$=" home"] img,
+    #contact footer a[aria-label$=" home"] img {
+        height: 5rem;
+    }
+}
+
+@media (min-width: 64rem) {
+    header > div:first-of-type {
+        min-height: 8rem;
+    }
+
+    header > div:first-of-type a[aria-label$=" home"] img {
+        height: 6rem;
+    }
+
+    section[id] {
+        scroll-margin-top: 9rem;
+    }
 }
