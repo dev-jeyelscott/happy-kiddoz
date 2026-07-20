@@ -138,7 +138,7 @@ final class HomeController extends Controller
             'contactBrandName' => $this->settingOrFallback(
                 settings: $settings,
                 key: 'brand_name',
-                fallback: 'Happy Kiddoz',
+                fallback: 'Happy Kiddos',
             ),
 
             'contactLogoUrl' => $this->publicStorageUrl(
@@ -158,7 +158,7 @@ final class HomeController extends Controller
             'metaTitle' => $this->settingOrFallback(
                 settings: $settings,
                 key: 'meta_title',
-                fallback: 'Happy Kiddoz | Montessori Furniture and Learning Materials',
+                fallback: 'Happy Kiddos | Montessori Furniture and Learning Materials',
             ),
 
             'metaDescription' => $this->settingOrFallback(

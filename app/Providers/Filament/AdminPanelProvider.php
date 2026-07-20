@@ -6,12 +6,13 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -31,10 +32,55 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+
+            /*
+             * Use tracked public assets for login and panel branding.
+             *
+             * The filename remains unchanged for now to avoid breaking existing
+             * database and storage references. Only the visible brand spelling
+             * is canonicalized to "Happy Kiddos".
+             */
+            ->brandName('Happy Kiddos')
+            ->brandLogo(
+                asset('images/brand/happy-kiddos-logo.webp'),
+            )
+            ->brandLogoHeight('2.75rem')
+            ->favicon(
+                asset('images/brand/favicon.ico'),
+            )
+
+            /*
+             * Register the approved brown as Filament's primary palette.
+             *
+             * Filament generates the required accessible shades from the
+             * supplied hex color instead of requiring a hand-written palette.
+             */
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#8C6239',
+                'gray' => Color::Stone,
             ])
+
+            /*
+             * The approved admin design is intentionally light-only.
+             *
+             * This prevents an untested dark variant from conflicting with the
+             * cream surfaces and brown brand palette.
+             */
+            ->darkMode(false)
             ->viteTheme('resources/css/filament/admin/theme.css')
+
+            /*
+             * Keep the panel compact on desktop while retaining full mobile
+             * sidebar behavior.
+             */
+            ->sidebarCollapsibleOnDesktop()
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label('Website')
+                    ->icon(Heroicon::OutlinedGlobeAlt)
+                    ->collapsible(false),
+            ])
+
             ->discoverResources(
                 in: app_path('Filament/Resources'),
                 for: 'App\Filament\Resources',
@@ -51,8 +97,11 @@ class AdminPanelProvider extends PanelProvider
                 for: 'App\Filament\Widgets',
             )
             ->widgets([
+                /*
+                 * Custom dashboard widgets are discovered automatically.
+                 * Keep only the built-in account widget registered manually.
+                 */
                 AccountWidget::class,
-                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

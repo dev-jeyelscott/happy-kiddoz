@@ -22,7 +22,7 @@ it('loads the homepage with one settings query and one sections query', function
      */
     SiteSetting::query()->create([
         'key' => 'brand_name',
-        'value' => 'Happy Kiddoz',
+        'value' => 'Happy Kiddos',
         'group' => 'branding',
     ]);
 
