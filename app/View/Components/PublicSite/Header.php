@@ -6,6 +6,7 @@ use App\Enums\HomepageSectionKey;
 use App\Models\HomepageSection;
 use App\Models\SiteSetting;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\Component;
@@ -13,12 +14,49 @@ use Illuminate\View\Component;
 final class Header extends Component
 {
     /**
+     * The homepage sections available to public navigation.
+     *
+     * @var EloquentCollection<int|string, HomepageSection>
+     */
+    private readonly EloquentCollection $sections;
+
+    /**
+     * Global site settings used by the public header.
+     *
+     * @var array<string, string|null>
+     */
+    private readonly array $settings;
+
+    /**
+     * Reuse data loaded by HomeController when available.
+     *
+     * The fallback queries preserve compatibility with legacy public pages
+     * until those routes and views are removed during Phase 11.
+     *
+     * @param  EloquentCollection<int|string, HomepageSection>|null  $sections
+     * @param  array<string, string|null>|null  $settings
+     */
+    public function __construct(
+        ?EloquentCollection $sections = null,
+        ?array $settings = null,
+    ) {
+        $this->sections = $sections
+            ?? HomepageSection::query()
+                ->visible()
+                ->ordered()
+                ->get(['key', 'content']);
+
+        $this->settings = $settings
+            ?? SiteSetting::keyValueMap();
+    }
+
+    /**
      * Render the public header using canonical homepage sections
      * and typed global site settings.
      */
     public function render(): View
     {
-        $settings = SiteSetting::keyValueMap();
+        $settings = $this->settings;
 
         return view('components.public.header', [
             'brandName' => $this->brandName(
@@ -41,14 +79,9 @@ final class Header extends Component
      */
     private function navigationLinks(): array
     {
-        $sections = HomepageSection::query()
-            ->visible()
-            ->ordered()
-            ->get(['key', 'content']);
-
         $links = [];
 
-        foreach ($sections as $section) {
+        foreach ($this->sections as $section) {
             if (! $this->shouldRenderNavigationLink($section)) {
                 continue;
             }

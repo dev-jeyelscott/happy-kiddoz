@@ -14,74 +14,79 @@ use Illuminate\Support\Str;
 final class HomeController extends Controller
 {
     /**
-     * Render the public homepage with the currently implemented sections.
+     * Render the public homepage using one settings query and one sections query.
      */
     public function index(): View
     {
+        /*
+        * Load all global settings once. The same settings collection is passed
+        * through the public layout so the header does not query them again.
+        */
         $settings = SiteSetting::keyValueMap();
 
-        $heroSection = HomepageSection::query()
+        /*
+        * Load every publicly visible homepage section in one deterministic query.
+        *
+        * Keying the collection by the primitive enum value allows each section to
+        * be retrieved without additional database calls.
+        */
+        $sections = HomepageSection::query()
             ->visible()
-            ->where('key', HomepageSectionKey::Hero->value)
-            ->first();
+            ->ordered()
+            ->get()
+            ->keyBy(
+                static fn (HomepageSection $section): string => $section->key->value,
+            );
 
-        $heroContent = is_array($heroSection?->content)
-            ? $heroSection->content
-            : [];
+        $heroSection = $sections->get(
+            HomepageSectionKey::Hero->value,
+        );
 
-        $categoriesSection = HomepageSection::query()
-            ->visible()
-            ->where('key', HomepageSectionKey::Categories->value)
-            ->first();
+        $categoriesSection = $sections->get(
+            HomepageSectionKey::Categories->value,
+        );
 
-        $categoriesContent = is_array($categoriesSection?->content)
-            ? $categoriesSection->content
-            : [];
+        $aboutSection = $sections->get(
+            HomepageSectionKey::About->value,
+        );
 
-        $aboutSection = HomepageSection::query()
-            ->visible()
-            ->where('key', HomepageSectionKey::About->value)
-            ->first();
+        $advantagesSection = $sections->get(
+            HomepageSectionKey::Advantages->value,
+        );
 
-        $aboutContent = is_array($aboutSection?->content)
-            ? $aboutSection->content
-            : [];
+        $reviewsSection = $sections->get(
+            HomepageSectionKey::Reviews->value,
+        );
 
-        $advantagesSection = HomepageSection::query()
-            ->visible()
-            ->where('key', HomepageSectionKey::Advantages->value)
-            ->first();
+        $faqSection = $sections->get(
+            HomepageSectionKey::Faq->value,
+        );
 
-        $advantagesContent = is_array($advantagesSection?->content)
-            ? $advantagesSection->content
-            : [];
+        $contactSection = $sections->get(
+            HomepageSectionKey::Contact->value,
+        );
 
-        $contactSection = HomepageSection::query()
-            ->visible()
-            ->where('key', HomepageSectionKey::Contact->value)
-            ->first();
+        /*
+        * Normalize section content after the records have been retrieved.
+        * These operations happen in memory and do not execute more queries.
+        */
+        $heroContent = $this->sectionContent($heroSection);
+        $categoriesContent = $this->sectionContent($categoriesSection);
+        $aboutContent = $this->sectionContent($aboutSection);
+        $advantagesContent = $this->sectionContent($advantagesSection);
+        $reviewsContent = $this->sectionContent($reviewsSection);
+        $faqContent = $this->sectionContent($faqSection);
 
         $externalPlatformLinks = $this->externalPlatformLinks($settings);
 
-        $faqSection = HomepageSection::query()
-            ->visible()
-            ->where('key', HomepageSectionKey::Faq->value)
-            ->first();
-
-        $faqContent = is_array($faqSection?->content)
-            ? $faqSection->content
-            : [];
-
-        $reviewsSection = HomepageSection::query()
-            ->visible()
-            ->where('key', HomepageSectionKey::Reviews->value)
-            ->first();
-
-        $reviewsContent = is_array($reviewsSection?->content)
-            ? $reviewsSection->content
-            : [];
-
         return view('pages.home', [
+            /*
+            * Make the already-loaded data available to the public layout and
+            * header so they do not execute duplicate queries.
+            */
+            'homepageSections' => $sections,
+            'siteSettings' => $settings,
+
             'heroSection' => $heroSection,
 
             'heroImageUrl' => $this->publicStorageUrl(
@@ -112,6 +117,18 @@ final class HomeController extends Controller
                 $advantagesContent['items'] ?? [],
             ),
 
+            'reviewsSection' => $reviewsSection,
+
+            'reviewItems' => $this->reviewItems(
+                $reviewsContent['items'] ?? [],
+            ),
+
+            'faqSection' => $faqSection,
+
+            'faqItems' => $this->faqItems(
+                $faqContent['items'] ?? [],
+            ),
+
             'contactSection' => $contactSection,
 
             'contactDetails' => $this->contactDetails($settings),
@@ -121,7 +138,7 @@ final class HomeController extends Controller
             'contactBrandName' => $this->settingOrFallback(
                 settings: $settings,
                 key: 'brand_name',
-                fallback: 'Happy Kiddos',
+                fallback: 'Happy Kiddoz',
             ),
 
             'contactLogoUrl' => $this->publicStorageUrl(
@@ -138,22 +155,10 @@ final class HomeController extends Controller
                 $settings['terms_url'] ?? null,
             ),
 
-            'reviewsSection' => $reviewsSection,
-
-            'reviewItems' => $this->reviewItems(
-                $reviewsContent['items'] ?? [],
-            ),
-
-            'faqSection' => $faqSection,
-
-            'faqItems' => $this->faqItems(
-                $faqContent['items'] ?? [],
-            ),
-
             'metaTitle' => $this->settingOrFallback(
                 settings: $settings,
                 key: 'meta_title',
-                fallback: 'Happy Kiddos | Montessori Furniture and Learning Materials',
+                fallback: 'Happy Kiddoz | Montessori Furniture and Learning Materials',
             ),
 
             'metaDescription' => $this->settingOrFallback(
@@ -162,6 +167,19 @@ final class HomeController extends Controller
                 fallback: 'Thoughtfully designed Montessori furniture and learning materials for Filipino homes, schools, and learning centers.',
             ),
         ]);
+    }
+
+    /**
+     * Return a homepage section's JSON content as a predictable array.
+     *
+     * @return array<string, mixed>
+     */
+    private function sectionContent(
+        ?HomepageSection $section,
+    ): array {
+        return is_array($section?->content)
+            ? $section->content
+            : [];
     }
 
     /**
