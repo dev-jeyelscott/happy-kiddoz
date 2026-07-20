@@ -59,7 +59,7 @@ class SiteSettingSeeder extends Seeder
 
             // Marketplace links
             'primary_shop_url' => [
-                'value' => '',
+                'value' => 'https://shopee.ph/bugs_2wan',
                 'group' => 'marketplace',
             ],
             'shopee_url' => [
