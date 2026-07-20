@@ -56,6 +56,15 @@ final class HomeController extends Controller
             ? $advantagesSection->content
             : [];
 
+        $faqSection = HomepageSection::query()
+            ->visible()
+            ->where('key', HomepageSectionKey::Faq->value)
+            ->first();
+
+        $faqContent = is_array($faqSection?->content)
+            ? $faqSection->content
+            : [];
+
         $reviewsSection = HomepageSection::query()
             ->visible()
             ->where('key', HomepageSectionKey::Reviews->value)
@@ -100,6 +109,12 @@ final class HomeController extends Controller
 
             'reviewItems' => $this->reviewItems(
                 $reviewsContent['items'] ?? [],
+            ),
+
+            'faqSection' => $faqSection,
+
+            'faqItems' => $this->faqItems(
+                $faqContent['items'] ?? [],
             ),
 
             'metaTitle' => $this->settingOrFallback(
@@ -287,6 +302,68 @@ final class HomeController extends Controller
         );
 
         return $advantages;
+    }
+
+    /**
+     * Normalize FAQ entries for safe and predictable public rendering.
+     *
+     * Empty, malformed, and explicitly hidden entries are removed so the
+     * homepage and its navigation never expose an incomplete FAQ section.
+     *
+     * @return list<array{
+     *     question: string,
+     *     answer: string
+     * }>
+     */
+    private function faqItems(mixed $items): array
+    {
+        if (! is_array($items)) {
+            return [];
+        }
+
+        $faqItems = [];
+
+        foreach ($items as $item) {
+            if (! is_array($item)) {
+                continue;
+            }
+
+            /*
+             * Support an optional per-item visibility flag without requiring it
+             * in the current Filament schema. Missing visibility defaults to true.
+             */
+            $isVisible = filter_var(
+                $item['is_visible'] ?? true,
+                FILTER_VALIDATE_BOOL,
+                FILTER_NULL_ON_FAILURE,
+            );
+
+            if ($isVisible !== true) {
+                continue;
+            }
+
+            $question = trim((string) ($item['question'] ?? ''));
+            $answer = trim((string) ($item['answer'] ?? ''));
+
+            /*
+             * Incomplete entries must not produce empty disclosure controls or
+             * cause the FAQ navigation anchor to appear.
+             */
+            if ($question === '' || $answer === '') {
+                continue;
+            }
+
+            $faqItems[] = [
+                'question' => $question,
+                'answer' => $answer,
+            ];
+        }
+
+        /*
+         * Preserve the administrator-controlled repeater sequence because FAQ
+         * order is editorial rather than a fixed canonical product order.
+         */
+        return $faqItems;
     }
 
     /**

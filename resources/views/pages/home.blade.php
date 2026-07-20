@@ -18,4 +18,8 @@
 		@if ($reviewsSection && $reviewItems !== [])
 				<x-home.reviews :section="$reviewsSection" :items="$reviewItems" />
 		@endif
+
+		@if ($faqSection && $faqItems !== [])
+				<x-home.faq :section="$faqSection" :items="$faqItems" />
+		@endif
 </x-layouts.public>

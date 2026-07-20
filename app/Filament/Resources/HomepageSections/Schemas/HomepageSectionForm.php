@@ -412,6 +412,9 @@ class HomepageSectionForm
 
     /**
      * Build the optional FAQ fields.
+     *
+     * The section may remain empty and hidden until the client approves the
+     * final questions and answers.
      */
     private static function faqSection(): Section
     {
@@ -423,6 +426,11 @@ class HomepageSectionForm
                 fn (?HomepageSection $record): bool => self::sectionKey($record) === 'faq'
             )
             ->schema([
+                TextInput::make('content.eyebrow')
+                    ->label('Eyebrow')
+                    ->required()
+                    ->maxLength(120),
+
                 TextInput::make('content.heading')
                     ->label('Section Heading')
                     ->required()
@@ -437,10 +445,12 @@ class HomepageSectionForm
                     )
                     ->schema([
                         TextInput::make('question')
+                            ->label('Question')
                             ->required()
                             ->maxLength(240),
 
                         Textarea::make('answer')
+                            ->label('Answer')
                             ->required()
                             ->rows(5)
                             ->maxLength(1600),

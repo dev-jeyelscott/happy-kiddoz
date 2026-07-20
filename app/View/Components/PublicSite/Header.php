@@ -156,12 +156,21 @@ final class Header extends Component
     }
 
     /**
-     * Determine whether the FAQ contains at least one complete visible item.
+     * Determine whether the FAQ has a heading and at least one complete,
+     * publicly visible question-and-answer entry.
      */
     private function faqHasVisibleContent(
         HomepageSection $section,
     ): bool {
-        $items = $section->content['items'] ?? [];
+        $content = is_array($section->content)
+            ? $section->content
+            : [];
+
+        if (blank($content['heading'] ?? null)) {
+            return false;
+        }
+
+        $items = $content['items'] ?? [];
 
         if (! is_array($items)) {
             return false;
@@ -172,7 +181,13 @@ final class Header extends Component
                 continue;
             }
 
-            if (($item['is_visible'] ?? true) === false) {
+            $isVisible = filter_var(
+                $item['is_visible'] ?? true,
+                FILTER_VALIDATE_BOOL,
+                FILTER_NULL_ON_FAILURE,
+            );
+
+            if ($isVisible !== true) {
                 continue;
             }
 
