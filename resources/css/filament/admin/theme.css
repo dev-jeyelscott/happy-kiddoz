@@ -1,0 +1,12 @@
+/*
+ * Filament admin theme entry point.
+ *
+ * Import Filament first, then the shared Happy Kiddoz tokens so the project
+ * tokens are available to custom pages, widgets, resources, and components.
+ */
+
+@import "../../../../vendor/filament/filament/resources/css/theme.css";
+@import "../../brand/theme.css";
+
+@source "../../../../app/Filament/**/*";
+@source "../../../../resources/views/filament/**/*";

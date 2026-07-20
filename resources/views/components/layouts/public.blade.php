@@ -6,6 +6,7 @@
         :description="$description ?? null"
     />
 
+    @fonts(['body', 'display'])
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-stone-950 text-stone-100 antialiased">

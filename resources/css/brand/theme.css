@@ -1,0 +1,73 @@
+/*
+ * Shared Happy Kiddoz design tokens.
+ *
+ * This file is imported by both the public application stylesheet and the
+ * Filament admin theme. Keep brand values here instead of duplicating them
+ * across Blade components or panel-specific stylesheets.
+ */
+
+@theme static {
+    /*
+     * Typography
+     *
+     * The Laravel Vite font provider generates the two referenced variables.
+     * System fallbacks prevent invisible text if a font asset cannot load.
+     */
+    --font-sans: var(
+        --font-brand-sans,
+        "Instrument Sans",
+        ui-sans-serif,
+        system-ui,
+        sans-serif
+    );
+    --font-display: var(
+        --font-brand-display,
+        "Lora",
+        ui-serif,
+        Georgia,
+        Cambria,
+        serif
+    );
+
+    /*
+     * Brand surfaces
+     */
+    --color-brand-canvas: #fdfbf7;
+    --color-brand-surface: #ffffff;
+    --color-brand-section: #faf4ee;
+    --color-brand-section-alt: #faf7f2;
+
+    /*
+     * Brand typography
+     */
+    --color-brand-ink: #3d2c22;
+    --color-brand-body: #5c5047;
+    --color-brand-muted: #7c6e65;
+    --color-brand-eyebrow: #8a694e;
+    --color-brand-eyebrow-soft: #b39274;
+
+    /*
+     * Primary actions and borders
+     */
+    --color-brand-primary: #8c6239;
+    --color-brand-primary-hover: #734f2d;
+    --color-brand-border: #f0e4d8;
+
+    /*
+     * External marketplace brand colors
+     */
+    --color-marketplace-shopee: #ee4d2d;
+    --color-marketplace-lazada: #101566;
+
+    /*
+     * Shape
+     */
+    --radius-brand-card: 1rem;
+    --radius-brand-panel: 1.5rem;
+
+    /*
+     * Elevation
+     */
+    --shadow-brand-card: 0 14px 36px -24px rgb(61 44 34 / 0.28);
+    --shadow-brand-image: 0 28px 56px -28px rgb(61 44 34 / 0.32);
+}
