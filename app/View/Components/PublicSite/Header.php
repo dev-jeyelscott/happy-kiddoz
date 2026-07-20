@@ -7,6 +7,7 @@ use App\Models\HomepageSection;
 use App\Models\SiteSetting;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\Component;
 
 final class Header extends Component
@@ -78,12 +79,30 @@ final class Header extends Component
             return false;
         }
 
+        if (! $this->hasHomepageComponent($section->key)) {
+            return false;
+        }
+
         if ($section->key === HomepageSectionKey::Faq) {
             return $this->faqHasVisibleContent($section);
         }
 
         return $section->key->anchor() !== null
             && $section->key->navigationLabel() !== null;
+    }
+
+    /**
+     * Determine whether the public Blade component for a section exists.
+     *
+     * This prevents the header from linking to sections that have not yet
+     * been implemented during the incremental homepage refactor.
+     */
+    private function hasHomepageComponent(
+        HomepageSectionKey $key,
+    ): bool {
+        return ViewFacade::exists(
+            'components.home.'.$key->value,
+        );
     }
 
     /**

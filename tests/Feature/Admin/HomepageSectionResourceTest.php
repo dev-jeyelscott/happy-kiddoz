@@ -39,7 +39,7 @@ it('allows an administrator to update homepage content', function (): void {
 
     $content = [
         ...$hero->content,
-        'badge' => 'Updated by Happy Kiddoz',
+        'eyebrow' => 'Updated by Happy Kiddoz',
     ];
 
     Livewire::test(EditHomepageSection::class, [
@@ -57,7 +57,7 @@ it('allows an administrator to update homepage content', function (): void {
 
     expect($hero->is_visible)
         ->toBeFalse()
-        ->and($hero->content['badge'])
+        ->and($hero->content['eyebrow'])
         ->toBe('Updated by Happy Kiddoz');
 });
 

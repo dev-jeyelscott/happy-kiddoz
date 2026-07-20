@@ -111,3 +111,21 @@ it('can run the site setting seeder repeatedly without duplicate keys', function
             ->exists(),
     )->toBeFalse();
 });
+
+it('seeds the hero using the canonical admin-compatible content contract', function (): void {
+    $this->seed(HomepageSectionSeeder::class);
+
+    $hero = HomepageSection::query()
+        ->where('key', HomepageSectionKey::Hero->value)
+        ->firstOrFail();
+
+    expect(array_keys($hero->content))->toBe([
+        'eyebrow',
+        'headline',
+        'description',
+        'image_path',
+        'image_alt',
+        'rating_value',
+        'rating_statement',
+    ]);
+});

@@ -74,7 +74,7 @@ class HomepageSectionForm
     }
 
     /**
-     * Build the hero-section fields.
+     * Build the hero-section fields using the canonical hero content contract.
      */
     private static function heroSection(): Section
     {
@@ -84,13 +84,14 @@ class HomepageSectionForm
             )
             ->columns(2)
             ->schema([
-                TextInput::make('content.badge')
-                    ->label('Badge')
+                TextInput::make('content.eyebrow')
+                    ->label('Eyebrow Badge')
                     ->required()
-                    ->maxLength(80),
+                    ->maxLength(120)
+                    ->columnSpanFull(),
 
-                TextInput::make('content.heading')
-                    ->label('Heading')
+                TextInput::make('content.headline')
+                    ->label('Headline')
                     ->required()
                     ->maxLength(180)
                     ->columnSpanFull(),
@@ -103,11 +104,11 @@ class HomepageSectionForm
                     ->columnSpanFull(),
 
                 self::imageUpload(
-                    name: 'content.image',
+                    name: 'content.image_path',
                     label: 'Hero Image',
                     directory: 'homepage/hero',
-                    minWidth: 1200,
-                    minHeight: 800,
+                    minWidth: 900,
+                    minHeight: 900,
                 ),
 
                 TextInput::make('content.image_alt')
@@ -115,7 +116,7 @@ class HomepageSectionForm
                     ->required()
                     ->maxLength(180),
 
-                TextInput::make('content.rating')
+                TextInput::make('content.rating_value')
                     ->label('Rating')
                     ->numeric()
                     ->minValue(0)
