@@ -75,7 +75,7 @@ it('links only categories with an approved https destination', function (): void
 
     $content = $section->content;
     $content['items'][0]['external_url'] =
-        'https://shopee.ph/happy-kiddoz-tables-and-chairs';
+        'https://shopee.ph/happy-kiddos-tables-and-chairs';
 
     $section->update([
         'content' => $content,
@@ -84,7 +84,7 @@ it('links only categories with an approved https destination', function (): void
     $this->get(route('home'))
         ->assertOk()
         ->assertSee(
-            'href="https://shopee.ph/happy-kiddoz-tables-and-chairs"',
+            'href="https://shopee.ph/happy-kiddos-tables-and-chairs"',
             escape: false,
         )
         ->assertSee('target="_blank"', escape: false)

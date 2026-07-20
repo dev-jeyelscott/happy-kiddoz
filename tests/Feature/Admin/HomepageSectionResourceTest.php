@@ -39,7 +39,7 @@ it('allows an administrator to update homepage content', function (): void {
 
     $content = [
         ...$hero->content,
-        'eyebrow' => 'Updated by Happy Kiddoz',
+        'eyebrow' => 'Updated by Happy Kiddos',
     ];
 
     Livewire::test(EditHomepageSection::class, [
@@ -58,7 +58,7 @@ it('allows an administrator to update homepage content', function (): void {
     expect($hero->is_visible)
         ->toBeFalse()
         ->and($hero->content['eyebrow'])
-        ->toBe('Updated by Happy Kiddoz');
+        ->toBe('Updated by Happy Kiddos');
 });
 
 it('does not allow the section key to be changed', function (): void {
@@ -107,7 +107,7 @@ it('updates categories using the canonical content field names', function (): vo
     $content['items'][0]['description'] =
         'Updated category description.';
     $content['items'][0]['external_url'] =
-        'https://shopee.ph/happy-kiddoz-tables';
+        'https://shopee.ph/happy-kiddos-tables';
 
     Livewire::test(EditHomepageSection::class, [
         'record' => $categories->getRouteKey(),
@@ -134,7 +134,7 @@ it('updates categories using the canonical content field names', function (): vo
         ->and($categories->content['items'][0]['description'])
         ->toBe('Updated category description.')
         ->and($categories->content['items'][0]['external_url'])
-        ->toBe('https://shopee.ph/happy-kiddoz-tables');
+        ->toBe('https://shopee.ph/happy-kiddos-tables');
 });
 
 it('updates about content using the canonical image path field', function (): void {

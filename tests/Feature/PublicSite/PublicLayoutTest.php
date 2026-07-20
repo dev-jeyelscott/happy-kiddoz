@@ -11,7 +11,7 @@ uses(RefreshDatabase::class);
 beforeEach(function (): void {
     SiteSetting::query()->create([
         'key' => 'brand_name',
-        'value' => 'Happy Kiddoz',
+        'value' => 'Happy Kiddos',
         'group' => 'brand',
     ]);
 

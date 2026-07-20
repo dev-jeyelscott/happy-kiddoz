@@ -27,7 +27,7 @@ it('renders the approved about content after the category section', function ():
         ->assertSee('aria-labelledby="homepage-about-heading"', escape: false)
         ->assertSee('About Us')
         ->assertSee(
-            'Happy Kiddoz was founded in 2016, inspired by a personal experience as a parent.',
+            'Happy Kiddos was founded in 2016, inspired by a personal experience as a parent.',
         )
         ->assertSeeInOrder([
             'When our first child was born',
@@ -54,7 +54,7 @@ it('does not render the about section when it is hidden', function (): void {
         ->assertOk()
         ->assertDontSee('id="about"', escape: false)
         ->assertDontSee(
-            'Happy Kiddoz was founded in 2016, inspired by a personal experience as a parent.',
+            'Happy Kiddos was founded in 2016, inspired by a personal experience as a parent.',
         );
 });
 

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class SiteSettingSeeder extends Seeder
 {
     /**
-     * Seed the canonical Happy Kiddoz global settings.
+     * Seed the canonical Happy Kiddos global settings.
      *
      * Unconfirmed URLs, contact details, and assets remain null so the
      * public website can omit them instead of rendering broken links.
@@ -35,7 +35,7 @@ class SiteSettingSeeder extends Seeder
         return [
             // Branding
             'brand_name' => [
-                'value' => 'Happy Kiddoz',
+                'value' => 'Happy Kiddos',
                 'group' => 'brand',
             ],
             'brand_tagline' => [
@@ -44,8 +44,8 @@ class SiteSettingSeeder extends Seeder
             ],
             'logo_path' => [
                 'value' => $this->seedBrandAsset(
-                    sourceRelativePath: 'images/brand/happy-kiddoz-logo.webp',
-                    targetPath: 'site/brand/happy-kiddoz-logo.webp',
+                    sourceRelativePath: 'images/brand/happy-kiddos-logo.webp',
+                    targetPath: 'site/brand/happy-kiddos-logo.webp',
                 ),
                 'group' => 'brand',
             ],
@@ -104,7 +104,7 @@ class SiteSettingSeeder extends Seeder
 
             // SEO
             'meta_title' => [
-                'value' => 'Happy Kiddoz | Montessori Furniture and Learning Materials',
+                'value' => 'Happy Kiddos | Montessori Furniture and Learning Materials',
                 'group' => 'seo',
             ],
             'meta_description' => [

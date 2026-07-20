@@ -1,4 +1,4 @@
-# Happy Kiddoz Homepage Content Contract
+# Happy Kiddos Homepage Content Contract
 
 ## Status
 
@@ -16,7 +16,7 @@ The homepage includes:
 2. Hero
 3. Shop by Category
 4. About
-5. Happy Kiddoz Advantages
+5. Happy Kiddos Advantages
 6. Reviews
 7. FAQ, when approved content exists
 8. Contact CTA
@@ -39,7 +39,7 @@ Shopee, Lazada, Facebook, Instagram, and Shop Now remain external destinations.
 The repository and project use the spelling:
 
 ```text
-Happy Kiddoz
+Happy Kiddos
 ```
 
 Some generated design references use:
@@ -50,22 +50,22 @@ Happy Kiddos
 
 Until the client confirms otherwise:
 
-- Use `Happy Kiddoz` as the working brand name.
+- Use `Happy Kiddos` as the working brand name.
 - Store the displayed name in the global `brand_name` setting.
 - Do not hard-code the brand name throughout Blade components.
 - Confirm that the final logo asset uses the client's official spelling before launch.
 
 ## 3. Homepage Section Order
 
-| Sort order | Section key | HTML anchor | Default visibility | Required for launch |
-|---:|---|---|---|---|
-| 10 | `hero` | None | Visible | Yes |
-| 20 | `categories` | `shop` | Visible | Yes |
-| 30 | `about` | `about` | Visible | Yes |
-| 40 | `advantages` | `why-us` | Visible | Yes |
-| 50 | `reviews` | `reviews` | Visible | Yes |
-| 60 | `faq` | `faq` | Hidden | No |
-| 70 | `contact` | `contact` | Visible | Yes |
+| Sort order | Section key  | HTML anchor | Default visibility | Required for launch |
+| ---------: | ------------ | ----------- | ------------------ | ------------------- |
+|         10 | `hero`       | None        | Visible            | Yes                 |
+|         20 | `categories` | `shop`      | Visible            | Yes                 |
+|         30 | `about`      | `about`     | Visible            | Yes                 |
+|         40 | `advantages` | `why-us`    | Visible            | Yes                 |
+|         50 | `reviews`    | `reviews`   | Visible            | Yes                 |
+|         60 | `faq`        | `faq`       | Hidden             | No                  |
+|         70 | `contact`    | `contact`   | Visible            | Yes                 |
 
 The section key is the internal CMS identifier.
 
@@ -75,15 +75,15 @@ Section keys and anchor identifiers must remain unique.
 
 ## 4. Header Navigation Contract
 
-| Label | Destination | Visibility rule |
-|---|---|---|
-| Shop | `/#shop` | Show when categories are visible |
-| About | `/#about` | Show when about is visible |
-| Why Us | `/#why-us` | Show when advantages are visible |
-| Reviews | `/#reviews` | Show when reviews are visible |
-| FAQ | `/#faq` | Show only when FAQ is visible and populated |
-| Contact | `/#contact` | Show when contact is visible |
-| Shop Now | Global `primary_shop_url` | Show only when a valid URL exists |
+| Label    | Destination               | Visibility rule                             |
+| -------- | ------------------------- | ------------------------------------------- |
+| Shop     | `/#shop`                  | Show when categories are visible            |
+| About    | `/#about`                 | Show when about is visible                  |
+| Why Us   | `/#why-us`                | Show when advantages are visible            |
+| Reviews  | `/#reviews`               | Show when reviews are visible               |
+| FAQ      | `/#faq`                   | Show only when FAQ is visible and populated |
+| Contact  | `/#contact`               | Show when contact is visible                |
+| Shop Now | Global `primary_shop_url` | Show only when a valid URL exists           |
 
 The FAQ navigation item must not be rendered while the FAQ section is hidden or empty.
 
@@ -102,42 +102,42 @@ The following values belong to site settings because they are shared across mult
 
 ### Branding
 
-| Key | Type | Required |
-|---|---|---|
-| `brand_name` | Plain text | Yes |
-| `brand_tagline` | Plain text | No |
-| `logo_path` | Image path | Yes |
-| `favicon_path` | Image path | Yes |
+| Key             | Type       | Required |
+| --------------- | ---------- | -------- |
+| `brand_name`    | Plain text | Yes      |
+| `brand_tagline` | Plain text | No       |
+| `logo_path`     | Image path | Yes      |
+| `favicon_path`  | Image path | Yes      |
 
 ### Marketplace and Social Links
 
-| Key | Type | Required |
-|---|---|---|
-| `primary_shop_url` | HTTPS URL | Yes |
-| `shopee_url` | HTTPS URL | No |
-| `lazada_url` | HTTPS URL | No |
-| `facebook_url` | HTTPS URL | No |
-| `instagram_url` | HTTPS URL | No |
+| Key                | Type      | Required |
+| ------------------ | --------- | -------- |
+| `primary_shop_url` | HTTPS URL | Yes      |
+| `shopee_url`       | HTTPS URL | No       |
+| `lazada_url`       | HTTPS URL | No       |
+| `facebook_url`     | HTTPS URL | No       |
+| `instagram_url`    | HTTPS URL | No       |
 
 ### Contact Details
 
-| Key | Type | Required |
-|---|---|---|
-| `contact_email` | Email address | Yes |
-| `contact_phone` | Phone number | Yes |
-| `contact_viber` | Phone number | No |
-| `contact_address` | Plain text | Yes |
-| `contact_map_url` | HTTPS URL | No |
+| Key               | Type          | Required |
+| ----------------- | ------------- | -------- |
+| `contact_email`   | Email address | Yes      |
+| `contact_phone`   | Phone number  | Yes      |
+| `contact_viber`   | Phone number  | No       |
+| `contact_address` | Plain text    | Yes      |
+| `contact_map_url` | HTTPS URL     | No       |
 
 ### SEO and Legal
 
-| Key | Type | Required |
-|---|---|---|
-| `meta_title` | Plain text | Yes |
-| `meta_description` | Plain text | Yes |
-| `privacy_policy_url` | Internal or HTTPS URL | No |
-| `terms_url` | Internal or HTTPS URL | No |
-| `copyright_text` | Plain text | No |
+| Key                  | Type                  | Required |
+| -------------------- | --------------------- | -------- |
+| `meta_title`         | Plain text            | Yes      |
+| `meta_description`   | Plain text            | Yes      |
+| `privacy_policy_url` | Internal or HTTPS URL | No       |
+| `terms_url`          | Internal or HTTPS URL | No       |
+| `copyright_text`     | Plain text            | No       |
 
 The copyright year should be generated dynamically by the application.
 
@@ -145,7 +145,7 @@ The copyright year should be generated dynamically by the application.
 
 The header contains:
 
-- Approved Happy Kiddoz logo
+- Approved Happy Kiddos logo
 - Homepage anchor navigation
 - Primary Shop Now action
 - Responsive mobile menu
@@ -235,16 +235,16 @@ Everything for a purposeful play space
 
 ### Required Category Order
 
-| Order | Title | Description |
-|---:|---|---|
-| 10 | Tables & Chairs | Right-sized seating for focused little learners. |
-| 20 | Bookshelves | Front-facing shelves that invite independent reading. |
-| 30 | Toy Organizers | Tidy, reachable storage that teaches order. |
-| 40 | Learning Towers | Safe kitchen helpers for hands-on discovery. |
-| 50 | Play Gyms | Indoor climbers that build strength and courage. |
-| 60 | Montessori Toys | Natural, purposeful play for growing minds. |
-| 70 | STEM Toys | Gears, builds and puzzles that spark curiosity. |
-| 80 | Storage and Trays | Beautiful order for shelves and activity work. |
+| Order | Title             | Description                                           |
+| ----: | ----------------- | ----------------------------------------------------- |
+|    10 | Tables & Chairs   | Right-sized seating for focused little learners.      |
+|    20 | Bookshelves       | Front-facing shelves that invite independent reading. |
+|    30 | Toy Organizers    | Tidy, reachable storage that teaches order.           |
+|    40 | Learning Towers   | Safe kitchen helpers for hands-on discovery.          |
+|    50 | Play Gyms         | Indoor climbers that build strength and courage.      |
+|    60 | Montessori Toys   | Natural, purposeful play for growing minds.           |
+|    70 | STEM Toys         | Gears, builds and puzzles that spark curiosity.       |
+|    80 | Storage and Trays | Beautiful order for shelves and activity work.        |
 
 ### Category Fields
 
@@ -272,7 +272,7 @@ About Us
 ### Heading
 
 ```text
-Happy Kiddoz was founded in 2016, inspired by a personal experience as a parent.
+Happy Kiddos was founded in 2016, inspired by a personal experience as a parent.
 ```
 
 ### Paragraph 1
@@ -314,18 +314,18 @@ Why Parents and Schools Choose Us
 ### Heading
 
 ```text
-The Happy Kiddoz Advantage
+The Happy Kiddos Advantage
 ```
 
 ### Required Items
 
-| Order | Icon key | Title | Description |
-|---:|---|---|---|
-| 10 | `sparkles` | Pioneer in Montessori Furniture | The first to offer Montessori-inspired furniture in the Philippine market. |
-| 20 | `leaf` | Natural & non-toxic | Solid, sustainably sourced wood with child-safe, non-toxic finishes and smooth, rounded edges. |
-| 30 | `blocks` | Montessori-aligned | Designed to be child-sized and accessible, encouraging independence and focused play. |
-| 40 | `shield` | Built to last | Sturdy construction tested for busy homes and classrooms, made to grow with your child. |
-| 50 | `truck` | Nationwide delivery | Fast, careful shipping across the Philippines via Shopee, Lazada, and approved couriers. |
+| Order | Icon key   | Title                           | Description                                                                                    |
+| ----: | ---------- | ------------------------------- | ---------------------------------------------------------------------------------------------- |
+|    10 | `sparkles` | Pioneer in Montessori Furniture | The first to offer Montessori-inspired furniture in the Philippine market.                     |
+|    20 | `leaf`     | Natural & non-toxic             | Solid, sustainably sourced wood with child-safe, non-toxic finishes and smooth, rounded edges. |
+|    30 | `blocks`   | Montessori-aligned              | Designed to be child-sized and accessible, encouraging independence and focused play.          |
+|    40 | `shield`   | Built to last                   | Sturdy construction tested for busy homes and classrooms, made to grow with your child.        |
+|    50 | `truck`    | Nationwide delivery             | Fast, careful shipping across the Philippines via Shopee, Lazada, and approved couriers.       |
 
 Icons must use controlled application identifiers.
 
@@ -452,7 +452,7 @@ The contact details shown in the design remain pending client confirmation befor
 
 The legal footer contains:
 
-- Happy Kiddoz logo
+- Happy Kiddos logo
 - Dynamic copyright year
 - Brand name
 - Privacy Policy link, when configured
@@ -479,7 +479,7 @@ Missing legal URLs must cause their corresponding links to be omitted.
 
 The following items require explicit client confirmation before launch:
 
-- Official spelling: Happy Kiddoz or Happy Kiddos
+- Official spelling: Happy Kiddos or Happy Kiddos
 - Final logo
 - Final hero and category images
 - Marketplace URLs

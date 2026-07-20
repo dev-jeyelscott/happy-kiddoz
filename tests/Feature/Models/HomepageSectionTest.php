@@ -9,7 +9,7 @@ it('casts homepage section attributes to their expected types', function () {
     $section = HomepageSection::factory()
         ->forKey(HomepageSectionKey::About)
         ->withContent([
-            'heading' => 'About Happy Kiddoz',
+            'heading' => 'About Happy Kiddos',
             'paragraphs' => [
                 'First paragraph.',
                 'Second paragraph.',
@@ -21,7 +21,7 @@ it('casts homepage section attributes to their expected types', function () {
 
     expect($section->key)->toBe(HomepageSectionKey::About)
         ->and($section->content)->toBeArray()
-        ->and($section->content['heading'])->toBe('About Happy Kiddoz')
+        ->and($section->content['heading'])->toBe('About Happy Kiddos')
         ->and($section->sort_order)->toBeInt()
         ->and($section->is_visible)->toBeBool();
 });

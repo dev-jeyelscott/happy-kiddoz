@@ -1,4 +1,4 @@
-# Happy Kiddoz Homepage Asset Contract
+# Happy Kiddos Homepage Asset Contract
 
 ## Status
 
@@ -27,7 +27,7 @@ The final combined homepage image takes precedence when individual screenshots c
 
 ```text
 public/images/brand/
-├── happy-kiddoz-logo.webp
+├── happy-kiddos-logo.webp
 └── favicon.webp
 
 database/seeders/assets/homepage/
@@ -74,7 +74,7 @@ Correct:
 ```text
 learning-towers.webp
 tables-and-chairs.webp
-happy-kiddoz-logo.webp
+happy-kiddos-logo.webp
 ```
 
 Incorrect:
@@ -92,7 +92,7 @@ Do not include spaces, temporary labels, or version numbers in production filena
 ### Logo
 
 ```text
-Happy Kiddoz
+Happy Kiddos
 ```
 
 When the logo is immediately beside visible brand text and would be redundant, use an empty alt value.

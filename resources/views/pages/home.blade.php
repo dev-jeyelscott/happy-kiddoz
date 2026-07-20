@@ -15,11 +15,16 @@
 				<x-home.advantages :section="$advantagesSection" :items="$advantageItems" />
 		@endif
 
-		@if ($reviewsSection && $reviewItems !== [])
+		@if ($reviewsSection)
 				<x-home.reviews :section="$reviewsSection" :items="$reviewItems" />
 		@endif
 
 		@if ($faqSection && $faqItems !== [])
 				<x-home.faq :section="$faqSection" :items="$faqItems" />
+		@endif
+
+		@if ($contactSection)
+				<x-home.contact :section="$contactSection" :details="$contactDetails" :links="$contactLinks" :brand-name="$contactBrandName" :logo-url="$contactLogoUrl"
+						:copyright-text="$footerCopyright" :privacy-policy-url="$privacyPolicyUrl" :terms-url="$termsUrl" />
 		@endif
 </x-layouts.public>

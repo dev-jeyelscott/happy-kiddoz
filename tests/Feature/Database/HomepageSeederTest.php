@@ -82,11 +82,11 @@ it('keeps reviews and faq hidden until approved content exists', function () {
         ->toBe([]);
 });
 
-it('seeds Happy Kiddoz global settings without placeholder links', function () {
+it('seeds Happy Kiddos global settings without placeholder links', function () {
     $this->seed(SiteSettingSeeder::class);
 
     expect(SiteSetting::value('brand_name'))
-        ->toBe('Happy Kiddoz')
+        ->toBe('Happy Kiddos')
         ->and(SiteSetting::value('primary_shop_url'))
         ->toBeNull()
         ->and(SiteSetting::value('shopee_url'))

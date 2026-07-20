@@ -219,7 +219,7 @@ class HomepageSectionForm
      */
     private static function aboutSection(): Section
     {
-        return Section::make('About Happy Kiddoz')
+        return Section::make('About Happy Kiddos')
             ->visible(
                 fn (?HomepageSection $record): bool => self::sectionKey($record) === 'about'
             )
@@ -267,7 +267,7 @@ class HomepageSectionForm
      */
     private static function advantagesSection(): Section
     {
-        return Section::make('Happy Kiddoz Advantages')
+        return Section::make('Happy Kiddos Advantages')
             ->description(
                 'The approved homepage design contains exactly five advantage cards.'
             )
@@ -466,20 +466,32 @@ class HomepageSectionForm
     private static function contactSection(): Section
     {
         return Section::make('Contact Call to Action')
+            ->description(
+                'Manage the contact panel copy. Contact details, shop links, social links, and legal links are configured under Site Settings.'
+            )
             ->visible(
                 fn (?HomepageSection $record): bool => self::sectionKey($record) === 'contact'
             )
+            ->columns(2)
             ->schema([
                 TextInput::make('content.heading')
                     ->label('Heading')
                     ->required()
-                    ->maxLength(180),
+                    ->maxLength(180)
+                    ->columnSpanFull(),
 
                 Textarea::make('content.description')
                     ->label('Supporting Text')
                     ->required()
                     ->rows(5)
-                    ->maxLength(800),
+                    ->maxLength(800)
+                    ->columnSpanFull(),
+
+                TextInput::make('content.links_panel_heading')
+                    ->label('Shop and Social Panel Heading')
+                    ->required()
+                    ->maxLength(120)
+                    ->columnSpanFull(),
             ]);
     }
 

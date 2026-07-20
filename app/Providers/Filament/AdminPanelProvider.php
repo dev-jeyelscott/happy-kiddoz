@@ -22,7 +22,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 class AdminPanelProvider extends PanelProvider
 {
     /**
-     * Configure the Happy Kiddoz administration panel.
+     * Configure the Happy Kiddos administration panel.
      */
     public function panel(Panel $panel): Panel
     {

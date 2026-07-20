@@ -167,7 +167,7 @@ class HomepageSectionSeeder extends Seeder
     {
         return [
             'eyebrow' => 'About Us',
-            'heading' => 'Happy Kiddoz was founded in 2016, inspired by a personal experience as a parent.',
+            'heading' => 'Happy Kiddos was founded in 2016, inspired by a personal experience as a parent.',
             'paragraphs' => [
                 'When our first child was born, we searched for child-sized bookshelves, toy organizers, and tables and chairs, but they were difficult to find, expensive to customize, and inconvenient to transport. As a former preschool teacher, we saw an opportunity to create furniture based on the Montessori philosophy: safe, child-sized, functional, and designed to encourage independence.',
                 'Over the years, our two children became our biggest product testers and inspiration. Their everyday use helped us refine every design to better meet the needs of growing families and classrooms.',
@@ -187,7 +187,7 @@ class HomepageSectionSeeder extends Seeder
     {
         return [
             'eyebrow' => 'Why Parents and Schools Choose Us',
-            'heading' => 'The Happy Kiddoz Advantage',
+            'heading' => 'The Happy Kiddos Advantage',
             'items' => [
                 [
                     'icon' => HomepageAdvantageIcon::Sparkles->value,

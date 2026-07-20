@@ -56,6 +56,13 @@ final class HomeController extends Controller
             ? $advantagesSection->content
             : [];
 
+        $contactSection = HomepageSection::query()
+            ->visible()
+            ->where('key', HomepageSectionKey::Contact->value)
+            ->first();
+
+        $externalPlatformLinks = $this->externalPlatformLinks($settings);
+
         $faqSection = HomepageSection::query()
             ->visible()
             ->where('key', HomepageSectionKey::Faq->value)
@@ -81,7 +88,7 @@ final class HomeController extends Controller
                 $heroContent['image_path'] ?? null,
             ),
 
-            'heroLinks' => $this->heroLinks($settings),
+            'heroLinks' => $externalPlatformLinks,
 
             'categoriesSection' => $categoriesSection,
 
@@ -105,6 +112,32 @@ final class HomeController extends Controller
                 $advantagesContent['items'] ?? [],
             ),
 
+            'contactSection' => $contactSection,
+
+            'contactDetails' => $this->contactDetails($settings),
+
+            'contactLinks' => $externalPlatformLinks,
+
+            'contactBrandName' => $this->settingOrFallback(
+                settings: $settings,
+                key: 'brand_name',
+                fallback: 'Happy Kiddos',
+            ),
+
+            'contactLogoUrl' => $this->publicStorageUrl(
+                $settings['logo_path'] ?? null,
+            ),
+
+            'footerCopyright' => $this->footerCopyright($settings),
+
+            'privacyPolicyUrl' => $this->validatedHttpsUrl(
+                $settings['privacy_policy_url'] ?? null,
+            ),
+
+            'termsUrl' => $this->validatedHttpsUrl(
+                $settings['terms_url'] ?? null,
+            ),
+
             'reviewsSection' => $reviewsSection,
 
             'reviewItems' => $this->reviewItems(
@@ -120,7 +153,7 @@ final class HomeController extends Controller
             'metaTitle' => $this->settingOrFallback(
                 settings: $settings,
                 key: 'meta_title',
-                fallback: 'Happy Kiddoz | Montessori Furniture and Learning Materials',
+                fallback: 'Happy Kiddos | Montessori Furniture and Learning Materials',
             ),
 
             'metaDescription' => $this->settingOrFallback(
@@ -455,15 +488,171 @@ final class HomeController extends Controller
     }
 
     /**
-     * Build the configured external marketplace and social links.
+     * Normalize the configured contact details for public rendering.
      *
-     * Empty, malformed, and non-HTTPS URLs are excluded so the public
-     * homepage never renders dead or unsafe external links.
+     * Empty or malformed values are excluded so the view never renders empty
+     * list rows, invalid email links, or unusable telephone destinations.
+     *
+     * @param  array<string, string|null>  $settings
+     * @return list<array{
+     *     key: string,
+     *     label: string,
+     *     value: string,
+     *     href: string|null,
+     *     opens_new_tab: bool
+     * }>
+     */
+    private function contactDetails(array $settings): array
+    {
+        $details = [];
+
+        $email = $this->validatedEmail(
+            $settings['contact_email'] ?? null,
+        );
+
+        if ($email !== null) {
+            $details[] = [
+                'key' => 'email',
+                'label' => 'Email',
+                'value' => $email,
+                'href' => 'mailto:'.$email,
+                'opens_new_tab' => false,
+            ];
+        }
+
+        $phone = trim((string) ($settings['contact_phone'] ?? ''));
+        $phoneHref = $this->telephoneHref($phone);
+
+        if ($phone !== '' && $phoneHref !== null) {
+            $details[] = [
+                'key' => 'phone',
+                'label' => 'Phone',
+                'value' => $phone,
+                'href' => $phoneHref,
+                'opens_new_tab' => false,
+            ];
+        }
+
+        $viber = trim((string) ($settings['contact_viber'] ?? ''));
+        $viberHref = $this->telephoneHref($viber);
+
+        if ($viber !== '' && $viberHref !== null) {
+            $details[] = [
+                'key' => 'viber',
+                'label' => 'Viber',
+                'value' => $viber.' (Viber)',
+                'href' => $viberHref,
+                'opens_new_tab' => false,
+            ];
+        }
+
+        $address = trim((string) ($settings['contact_address'] ?? ''));
+
+        if ($address !== '') {
+            $details[] = [
+                'key' => 'address',
+                'label' => 'Business address',
+                'value' => $address,
+                'href' => $this->validatedHttpsUrl(
+                    $settings['contact_map_url'] ?? null,
+                ),
+                'opens_new_tab' => true,
+            ];
+        }
+
+        return $details;
+    }
+
+    /**
+     * Return a validated email address.
+     */
+    private function validatedEmail(mixed $value): ?string
+    {
+        if (! is_string($value)) {
+            return null;
+        }
+
+        $email = trim($value);
+
+        if (
+            $email === ''
+            || filter_var($email, FILTER_VALIDATE_EMAIL) === false
+        ) {
+            return null;
+        }
+
+        return $email;
+    }
+
+    /**
+     * Convert a configured phone value into a normalized tel URI.
+     *
+     * The original formatted number remains the visible text while the link
+     * contains only an optional leading plus sign and decimal digits.
+     */
+    private function telephoneHref(mixed $value): ?string
+    {
+        if (! is_string($value)) {
+            return null;
+        }
+
+        $phone = trim($value);
+
+        if ($phone === '') {
+            return null;
+        }
+
+        $digits = preg_replace('/\D+/', '', $phone);
+
+        if (! is_string($digits) || $digits === '') {
+            return null;
+        }
+
+        $internationalPrefix = str_starts_with($phone, '+')
+            ? '+'
+            : '';
+
+        return 'tel:'.$internationalPrefix.$digits;
+    }
+
+    /**
+     * Build the complete footer copyright statement.
+     *
+     * @param  array<string, string|null>  $settings
+     */
+    private function footerCopyright(array $settings): string
+    {
+        $brandName = $this->settingOrFallback(
+            settings: $settings,
+            key: 'brand_name',
+            fallback: 'Happy Kiddos',
+        );
+
+        $copyrightText = trim(
+            (string) ($settings['copyright_text'] ?? ''),
+        );
+
+        $statement = sprintf(
+            '© %d %s.',
+            now()->year,
+            $brandName,
+        );
+
+        return $copyrightText !== ''
+            ? $statement.' '.$copyrightText
+            : $statement;
+    }
+
+    /**
+     * Build configured marketplace and social links for public sections.
+     *
+     * Empty, malformed, and non-HTTPS URLs are excluded so Hero and Contact
+     * never render placeholder or unsafe external destinations.
      *
      * @param  array<string, string|null>  $settings
      * @return list<array{key: string, label: string, url: string}>
      */
-    private function heroLinks(array $settings): array
+    private function externalPlatformLinks(array $settings): array
     {
         $definitions = [
             [

@@ -211,7 +211,7 @@ final class Header extends Component
 
         return $brandName !== ''
             ? $brandName
-            : config('app.name', 'Happy Kiddoz');
+            : config('app.name', 'Happy Kiddos');
     }
 
     /**

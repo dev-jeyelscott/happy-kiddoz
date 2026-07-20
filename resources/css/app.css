@@ -13,7 +13,7 @@
  * Application and Flux theme integration.
  *
  * The neutral palette remains available for authentication and framework
- * components, while interactive accents now use the Happy Kiddoz brown.
+ * components, while interactive accents now use the Happy Kiddos brown.
  */
 @theme {
     --color-zinc-50: #fafafa;
@@ -35,7 +35,7 @@
 
 /*
  * Retain readable Flux controls for existing dark-mode authentication pages.
- * The public Happy Kiddoz homepage will be light-only when its layout is
+ * The public Happy Kiddos homepage will be light-only when its layout is
  * replaced in Phase 7.
  */
 @layer theme {

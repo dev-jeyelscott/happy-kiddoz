@@ -32,8 +32,8 @@ it('loads canonical settings into the form', function (): void {
 
     Livewire::test(ManageSiteSettings::class)
         ->assertSchemaStateSet([
-            'brand_name' => 'Happy Kiddoz',
-            'meta_title' => 'Happy Kiddoz | Montessori Furniture and Learning Materials',
+            'brand_name' => 'Happy Kiddos',
+            'meta_title' => 'Happy Kiddos | Montessori Furniture and Learning Materials',
         ]);
 });
 
@@ -42,18 +42,18 @@ it('updates canonical site settings', function (): void {
 
     Livewire::test(ManageSiteSettings::class)
         ->fillForm([
-            'brand_name' => 'Happy Kiddoz Philippines',
+            'brand_name' => 'Happy Kiddos Philippines',
             'brand_tagline' => 'Thoughtful spaces for growing minds',
             'facebook_url' => 'https://www.facebook.com/happykiddoz',
             'contact_email' => 'hello@example.test',
-            'meta_title' => 'Happy Kiddoz Philippines',
+            'meta_title' => 'Happy Kiddos Philippines',
             'meta_description' => 'Montessori furniture and learning materials for Filipino families.',
         ])
         ->call('save')
         ->assertHasNoFormErrors();
 
     expect(SiteSetting::value('brand_name'))
-        ->toBe('Happy Kiddoz Philippines')
+        ->toBe('Happy Kiddos Philippines')
         ->and(SiteSetting::value('facebook_url'))
         ->toBe('https://www.facebook.com/happykiddoz')
         ->and(SiteSetting::value('contact_email'))
@@ -82,7 +82,7 @@ it('rejects external links that do not use https', function (): void {
 
     Livewire::test(ManageSiteSettings::class)
         ->fillForm([
-            'facebook_url' => 'http://example.com/happy-kiddoz',
+            'facebook_url' => 'http://example.com/happy-kiddos',
         ])
         ->call('save')
         ->assertHasFormErrors([

@@ -17,7 +17,7 @@ it('renders a visible and populated FAQ section with its navigation link', funct
                 ],
                 [
                     'question' => 'Can schools place an order?',
-                    'answer' => 'Schools may contact the Happy Kiddoz team for product assistance.',
+                    'answer' => 'Schools may contact the Happy Kiddos team for product assistance.',
                 ],
             ],
         ])

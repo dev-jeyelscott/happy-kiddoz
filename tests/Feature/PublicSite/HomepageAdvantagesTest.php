@@ -30,7 +30,7 @@ it('renders the approved advantages after the about section', function (): void 
             escape: false,
         )
         ->assertSee('Why Parents and Schools Choose Us')
-        ->assertSee('The Happy Kiddoz Advantage')
+        ->assertSee('The Happy Kiddos Advantage')
         ->assertSeeInOrder([
             'Pioneer in Montessori Furniture',
             'Natural &amp; non-toxic',
@@ -74,7 +74,7 @@ it('does not render the advantages when the section is hidden', function (): voi
     $this->get(route('home'))
         ->assertOk()
         ->assertDontSee('id="why-us"', escape: false)
-        ->assertDontSee('The Happy Kiddoz Advantage');
+        ->assertDontSee('The Happy Kiddos Advantage');
 });
 
 it('renders advantage cards using their configured sort order', function (): void {

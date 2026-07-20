@@ -10,7 +10,7 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the canonical Happy Kiddoz development baseline.
+     * Seed the canonical Happy Kiddos development baseline.
      */
     public function run(): void
     {

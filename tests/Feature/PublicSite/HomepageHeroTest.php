@@ -16,7 +16,7 @@ beforeEach(function (): void {
     ]);
 });
 
-it('renders the approved Happy Kiddoz hero content', function (): void {
+it('renders the approved Happy Kiddos hero content', function (): void {
     $response = $this->get(route('home'));
 
     $response
@@ -43,8 +43,8 @@ it('renders the approved Happy Kiddoz hero content', function (): void {
 
 it('renders only configured https marketplace and social links', function (): void {
     $links = [
-        'shopee_url' => 'https://shopee.ph/happy-kiddoz',
-        'lazada_url' => 'https://www.lazada.com.ph/shop/happy-kiddoz',
+        'shopee_url' => 'https://shopee.ph/happy-kiddos',
+        'lazada_url' => 'https://www.lazada.com.ph/shop/happy-kiddos',
         'facebook_url' => 'https://www.facebook.com/happykiddoz',
         'instagram_url' => 'https://www.instagram.com/happykiddoz',
     ];
@@ -64,11 +64,11 @@ it('renders only configured https marketplace and social links', function (): vo
         ->assertSee('Facebook')
         ->assertSee('Instagram')
         ->assertSee(
-            'href="https://shopee.ph/happy-kiddoz"',
+            'href="https://shopee.ph/happy-kiddos"',
             escape: false,
         )
         ->assertSee(
-            'href="https://www.lazada.com.ph/shop/happy-kiddoz"',
+            'href="https://www.lazada.com.ph/shop/happy-kiddos"',
             escape: false,
         )
         ->assertSee(
