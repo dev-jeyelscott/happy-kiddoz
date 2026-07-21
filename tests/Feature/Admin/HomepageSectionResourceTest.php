@@ -7,8 +7,10 @@ use App\Models\HomepageSection;
 use App\Models\User;
 use Database\Seeders\HomepageSectionSeeder;
 use Livewire\Livewire;
+use Illuminate\Support\Facades\Storage;
 
 beforeEach(function (): void {
+    Storage::fake('public');
     $this->actingAs(User::factory()->create());
 
     $this->seed(HomepageSectionSeeder::class);

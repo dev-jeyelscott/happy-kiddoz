@@ -7,8 +7,10 @@ use App\Models\User;
 use Database\Seeders\HomepageSectionSeeder;
 use Database\Seeders\SiteSettingSeeder;
 use Livewire\Livewire;
+use Illuminate\Support\Facades\Storage;
 
 beforeEach(function (): void {
+    Storage::fake('public');
     /*
      * Match the email-based Filament panel authorization rule.
      */

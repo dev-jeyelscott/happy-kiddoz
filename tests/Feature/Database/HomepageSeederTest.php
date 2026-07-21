@@ -5,6 +5,11 @@ use App\Models\HomepageSection;
 use App\Models\SiteSetting;
 use Database\Seeders\HomepageSectionSeeder;
 use Database\Seeders\SiteSettingSeeder;
+use Illuminate\Support\Facades\Storage;
+
+beforeEach(function (): void {
+    Storage::fake('public');
+});
 
 it('seeds every canonical homepage section in the approved order', function () {
     $this->seed(HomepageSectionSeeder::class);

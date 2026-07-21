@@ -5,8 +5,10 @@ use App\Models\SiteSetting;
 use App\Models\User;
 use Database\Seeders\SiteSettingSeeder;
 use Livewire\Livewire;
+use Illuminate\Support\Facades\Storage;
 
 beforeEach(function (): void {
+    Storage::fake('public');
     config()->set('admin.seed_user.email', 'admin@example.test');
 
     $this->admin = User::factory()->create([
