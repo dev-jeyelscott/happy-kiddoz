@@ -87,15 +87,17 @@ class SiteSettingSeeder extends Seeder
                 'group' => 'contact',
             ],
             'contact_phone' => [
-                'value' => null,
+                'value' => 'CLIENT_APPROVED_PHONE',
                 'group' => 'contact',
             ],
+
             'contact_viber' => [
-                'value' => null,
+                'value' => 'CLIENT_APPROVED_VIBER',
                 'group' => 'contact',
             ],
+
             'contact_address' => [
-                'value' => 'Valenzuela City, Metro Manila, Philippines',
+                'value' => 'CLIENT_APPROVED_COMPLETE_ADDRESS',
                 'group' => 'contact',
             ],
             'contact_map_url' => [

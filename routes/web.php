@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 | Public Web Routes
 |--------------------------------------------------------------------------
 |
-| Happy Kiddoz is implemented as one server-rendered homepage with anchor
+| Happy Kiddos is implemented as one server-rendered homepage with anchor
 | navigation. Filament registers the administration routes separately.
 |
 */

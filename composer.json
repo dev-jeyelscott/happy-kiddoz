@@ -1,9 +1,12 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/livewire-starter-kit",
+    "name": "dev-jeyelscott/happy-kiddos",
     "type": "project",
-    "description": "The official Laravel starter kit for Livewire.",
-    "keywords": ["laravel", "framework"],
+    "description": "Happy Kiddos Montessori furniture and learning materials website.",
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.4",

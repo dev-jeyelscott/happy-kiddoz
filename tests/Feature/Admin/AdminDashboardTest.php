@@ -37,7 +37,7 @@ beforeEach(function (): void {
 it('renders the branded admin dashboard and quick actions', function (): void {
     $this->get('/admin')
         ->assertOk()
-        ->assertSee('Happy Kiddoz')
+        ->assertSee('Happy Kiddos')
         ->assertSee('Homepage Status')
         ->assertSee('Quick actions')
         ->assertSee('Edit homepage sections')
